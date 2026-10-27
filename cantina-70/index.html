@@ -91,7 +91,7 @@ body{margin:0;background:var(--negro);color:var(--marfil);font:300 18px/1.6 var(
 img{display:block;max-width:100%}
 a{color:inherit}
 p{margin:0}
-h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;letter-spacing:.01em}
+h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;letter-spacing:.01em;text-wrap:balance;overflow-wrap:anywhere;hyphens:manual}
 /* oro metálico con bisel, como los titulares de sus flyers */
 .metal{background:var(--metal);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;filter:drop-shadow(0 1px 0 #3E2C10) drop-shadow(0 2px 0 rgba(20,14,4,.9)) drop-shadow(0 10px 22px rgba(0,0,0,.85))}
 .deco{font-family:var(--deco);font-weight:900;letter-spacing:.01em}
@@ -108,9 +108,21 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 
 /* ---------- Botones ---------- */
 .btn{position:relative;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:50px;padding:0 26px;border-radius:2px;text-decoration:none;font:500 16px/1 var(--text);letter-spacing:.06em;color:var(--negro)!important;background:var(--foil);background-size:200% 100%;background-position:0 0;border:0;transition:background-position .6s ease,box-shadow .3s}
-.btn:hover{background-position:100% 0;box-shadow:0 0 0 1px #f2dfae66,0 10px 40px -10px #c9a35f88}
 .btn.line{background:rgba(3,3,3,.55);color:var(--marfil)!important;box-shadow:inset 0 0 0 1px var(--linea)}
-.btn.line:hover{box-shadow:inset 0 0 0 1px var(--oro);color:var(--oro-hi)!important}
+.btn{touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.btn:active{background-position:100% 0}
+/* Hover solo con puntero fino: en táctil no hay hovers fantasma */
+@media (hover:hover) and (pointer:fine){
+  .btn:hover{background-position:100% 0;box-shadow:0 0 0 1px #f2dfae66,0 10px 40px -10px #c9a35f88}
+  .btn.line:hover{box-shadow:inset 0 0 0 1px var(--oro);color:var(--oro-hi)!important}
+  .top nav a:not(.btn):hover,.hero-facts a:hover,footer nav a:hover{color:var(--oro-hi)}
+  .ev:hover{box-shadow:inset 0 0 0 1px var(--oro),0 30px 60px -30px rgba(201,163,95,.35);transform:translateY(-3px)}
+  .ev:hover .ev-media img{transform:scale(1.03)}
+  .ev a:hover{border-bottom-color:var(--oro-hi)}
+  .hand:hover img:nth-child(1){transform:rotate(-29deg)}
+  .hand:hover img:nth-child(4){transform:rotate(29deg)}
+  .g:hover img{transform:scale(1.04);filter:saturate(1)}
+}
 
 /* ---------- Barra ---------- */
 .top{position:sticky;top:0;z-index:30;background:rgba(3,3,3,.82);backdrop-filter:blur(12px) saturate(1.2);-webkit-backdrop-filter:blur(12px) saturate(1.2);border-bottom:1px solid transparent;transition:border-color .3s}
@@ -120,8 +132,11 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 .mark em{font-style:normal;font-weight:700}
 .top nav{display:flex;align-items:center;gap:28px;font-size:15px;letter-spacing:.04em}
 .top nav a:not(.btn){text-decoration:none;color:var(--humo);transition:color .2s;padding:8px 0}
-.top nav a:not(.btn):hover{color:var(--oro-hi)}
-.top .btn{min-height:42px;padding:0 18px;font-size:14px}
+.top nav a:not(.btn){min-height:44px;display:inline-flex;align-items:center}
+.top .btn{min-height:44px;padding:0 18px;font-size:14px}
+.top{padding-top:env(safe-area-inset-top,0px)}
+.mark{min-height:44px}
+main section[id]{scroll-margin-top:calc(76px + env(safe-area-inset-top,0px))}
 .burger{display:none;width:44px;height:44px;border:0;background:transparent;color:var(--marfil);padding:0;cursor:pointer;position:relative}
 .burger i{position:absolute;left:11px;right:11px;height:1px;background:currentColor;transition:transform .3s,opacity .3s}
 .burger i:nth-child(1){top:16px}.burger i:nth-child(2){top:22px}.burger i:nth-child(3){top:28px}
@@ -130,11 +145,11 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 .burger[aria-expanded="true"] i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
 .drawer{display:none}
 @media(max-width:860px){
-  .top nav .nl{display:none}
+  .top nav a.nl{display:none}
   .top nav{gap:8px}
   .burger{display:block}
-  .drawer{display:block;position:fixed;inset:68px 0 auto 0;z-index:29;background:var(--negro);border-bottom:1px solid var(--linea);padding:12px var(--gut-r) 28px var(--gut);transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s,visibility .25s}
-  .drawer.open{opacity:1;transform:none;visibility:visible}
+  .drawer{display:block;position:fixed;inset:calc(68px + env(safe-area-inset-top,0px)) 0 auto 0;max-height:calc(100vh - 68px);max-height:calc(100dvh - 68px - env(safe-area-inset-top,0px));overflow-y:auto;overscroll-behavior:contain;z-index:29;background:var(--negro);border-bottom:1px solid var(--linea);padding:12px var(--gut-r) 28px var(--gut);transform:translateY(-8px);opacity:0;visibility:hidden;transition:opacity .25s,transform .25s,visibility .25s}
+  .drawer.open{opacity:1;transform:none;visibility:visible;transition:opacity .25s,transform .25s,visibility 0s}
   .drawer a{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid #c9a35f22;text-decoration:none;font-family:var(--display);font-size:26px;font-weight:600}
   .drawer a .orn{opacity:.7}
 }
@@ -142,11 +157,12 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 /* ---------- Hero: visual de pantalla LED en loop ---------- */
 .hero{position:relative;overflow:hidden;isolation:isolate;background:var(--negro)}
 .hero-cv{position:absolute;inset:0;width:100%;height:100%;z-index:-1;display:block}
-.stage{height:clamp(380px,calc(100svh - 68px - 340px),600px)}
+/* el escenario del 70 cede alto para que el CTA quede en el primer pantallazo */
+.stage{height:clamp(300px,calc(100vh - 68px - 420px),600px);height:clamp(300px,calc(100svh - 68px - 420px),600px)}
 .hero-copy{text-align:center;display:grid;justify-items:center;gap:18px;padding-top:26px;padding-bottom:28px}
 .hero-sign{display:inline-flex;align-items:center;gap:12px;font-size:15px;letter-spacing:.06em;color:var(--humo)}
 .hero-sign img{width:38px;height:38px;border-radius:50%;object-fit:cover;box-shadow:0 0 0 1px var(--linea)}
-.hero h1{font-size:clamp(40px,4.9vw,72px);font-weight:400;line-height:1;max-width:18ch;text-wrap:balance}
+.hero h1{font-size:clamp(40px,4.9vw,72px);font-weight:400;line-height:1;max-width:22ch;text-wrap:balance}
 .hero .lede{color:var(--humo);max-width:50ch;text-wrap:pretty}
 .hero-cta{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;margin-top:6px}
 .hero-facts{list-style:none;margin:0 auto;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;padding-top:0;padding-bottom:0}
@@ -155,7 +171,8 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 .hero-facts small{font-size:13px;color:var(--humo);letter-spacing:.05em}
 .hero-facts b{font-weight:400;font-family:var(--display);font-size:22px;line-height:1.15}
 .hero-facts a{text-decoration:none}
-.hero-facts a:hover{color:var(--oro-hi)}
+.hero-facts b{overflow-wrap:anywhere}
+.hero-facts a{display:inline-flex;align-items:center;min-height:44px}
 .status{display:inline-flex;align-items:center;gap:10px}
 .status i{width:8px;height:8px;border-radius:50%;background:var(--oro-lo);flex:none}
 .status.on i{background:var(--oro-hi);box-shadow:0 0 0 5px rgba(242,223,174,.12),0 0 16px var(--oro)}
@@ -179,10 +196,8 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 /* Agenda: muro de flyers */
 .events{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:clamp(16px,2vw,28px)}
 .ev{grid-column:span 4;position:relative;display:grid;grid-template-columns:minmax(0,1fr);background:var(--onix);padding:10px;box-shadow:inset 0 0 0 1px var(--linea);transition:box-shadow .35s,transform .35s}
-.ev:hover{box-shadow:inset 0 0 0 1px var(--oro),0 30px 60px -30px rgba(201,163,95,.35);transform:translateY(-3px)}
 .ev-media{position:relative;overflow:hidden;aspect-ratio:3/4;background:radial-gradient(70% 45% at 50% 100%,rgba(242,223,174,.16),transparent 70%),linear-gradient(180deg,#110d08,#050403);display:grid;place-items:center;isolation:isolate}
 .ev-media img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;transition:transform 1.2s ease}
-.ev:hover .ev-media img{transform:scale(1.03)}
 .ev-media .type{font-family:var(--deco);font-weight:900;text-align:center;font-size:clamp(28px,3vw,46px);line-height:.95;padding:0 18px;max-width:100%;overflow-wrap:break-word}
 .ev-media .frame{position:absolute;inset:8px;z-index:2;pointer-events:none;box-shadow:inset 0 0 0 1px rgba(242,223,174,.22)}
 .ev-body{display:flex;flex-direction:column;gap:8px;padding:18px 8px 8px}
@@ -190,7 +205,7 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 .ev h3{font-family:var(--deco);font-weight:900;font-size:clamp(22px,2vw,28px);line-height:1.05}
 .ev p{color:var(--humo);font-size:15px;line-height:1.5}
 .ev a{margin-top:auto;padding-top:8px;font-size:15px;letter-spacing:.04em;color:var(--oro-hi);text-decoration:none;align-self:flex-start;border-bottom:1px solid var(--linea);padding-bottom:4px}
-.ev a:hover{border-bottom-color:var(--oro-hi)}
+.ev-body > a:not(.btn){display:inline-flex;align-items:flex-end;min-height:44px}
 .ev .btn{margin-top:0;padding:0 22px;border-bottom:0;align-self:auto;color:var(--negro)}
 .ev .btn.line{color:var(--marfil)}
 .ev .ev-prize{color:transparent;font-size:clamp(22px,2.4vw,32px);line-height:1.1}
@@ -215,10 +230,10 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 /* ---------- La casa: contrabarra revelada por la luz ---------- */
 .casa{border-block:1px solid #c9a35f1a}
 .casa-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:clamp(36px,6vw,96px);align-items:center}
-.backbar{position:relative;aspect-ratio:4/5;padding:2px;background:var(--foil);border-radius:999px 999px 0 0}
+.backbar{position:relative;margin:0;aspect-ratio:4/5;padding:2px;background:var(--foil);border-radius:999px 999px 0 0}
 .backbar-in{position:relative;height:100%;overflow:hidden;border-radius:999px 999px 0 0;background:linear-gradient(180deg,#0d0a06,#030303);
   box-shadow:inset 0 0 0 8px #030303,inset 0 0 0 9px rgba(201,163,95,.45);display:grid;grid-template-rows:1.2fr 1fr 1fr 1fr;padding:30px 30px 0}
-.shelf{display:flex;align-items:flex-end;justify-content:space-around;gap:6px;border-bottom:2px solid transparent;border-image:var(--foil) 1;position:relative}
+.shelf{min-width:0;display:flex;align-items:flex-end;justify-content:space-around;gap:6px;border-bottom:2px solid transparent;border-image:var(--foil) 1;position:relative}
 .shelf:first-child{border:0}
 .bottle{position:relative;width:var(--w,22px);height:var(--h,70%);border-radius:7px 7px 3px 3px;background:linear-gradient(90deg,rgba(0,0,0,.6),transparent 30%,rgba(255,240,210,.28) 42%,transparent 55%,rgba(0,0,0,.5)),var(--c,#6a4a1c)}
 .bottle::before{content:"";position:absolute;left:50%;bottom:100%;width:34%;height:var(--n,26%);translate:-50% 0;border-radius:2px 2px 0 0;background:inherit}
@@ -254,14 +269,12 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 .perks li{display:block;padding:14px 0;border-top:1px solid #c9a35f26;font-size:17px}
 .perks li:last-child{border-bottom:1px solid #c9a35f26}
 .perks .orn{transform:translateY(-2px) rotate(45deg);margin-right:12px}
-.hand{position:relative;height:clamp(380px,40vw,520px);margin-top:40px}
-.hand img{position:absolute;left:50%;bottom:0;width:clamp(170px,19vw,260px);height:auto;aspect-ratio:3/4;object-fit:cover;box-shadow:0 0 0 1px rgba(242,223,174,.35),0 30px 60px -20px #000;transform-origin:50% 170%;translate:-50% 0;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.hand{--cw:clamp(170px,19vw,260px);position:relative;height:clamp(380px,40vw,520px);margin-top:40px}
+.hand img{position:absolute;left:50%;bottom:0;width:var(--cw);height:auto;aspect-ratio:3/4;object-fit:cover;box-shadow:0 0 0 1px rgba(242,223,174,.35),0 30px 60px -20px #000;transform-origin:50% 170%;translate:-50% 0;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
 .hand img:nth-child(1){transform:rotate(-24deg)}
 .hand img:nth-child(2){transform:rotate(-8deg)}
 .hand img:nth-child(3){transform:rotate(8deg)}
 .hand img:nth-child(4){transform:rotate(24deg)}
-.hand:hover img:nth-child(1){transform:rotate(-29deg)}
-.hand:hover img:nth-child(4){transform:rotate(29deg)}
 
 /* ---------- Cumpleaños ---------- */
 .cumple{background:
@@ -297,7 +310,6 @@ h1,h2,h3{font-family:var(--display);font-weight:600;margin:0;line-height:1;lette
 .g{position:relative;margin:0;overflow:hidden;background:var(--onix);box-shadow:inset 0 0 0 1px var(--linea)}
 .g:nth-child(1){grid-column:span 2;grid-row:span 2}
 .g img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9);transition:transform 1.4s ease,filter .6s}
-.g:hover img{transform:scale(1.04);filter:saturate(1)}
 .g figcaption{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:40px 14px 12px;background:linear-gradient(transparent,rgba(3,3,3,.92));font-size:14px;letter-spacing:.03em}
 .credit{margin-top:18px;font-size:15px;color:var(--humo)}
 .credit a{color:var(--oro-hi)}
@@ -340,7 +352,9 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;align-ite
 footer .mark{color:var(--marfil)}
 footer nav{display:flex;flex-wrap:wrap;gap:22px}
 footer nav a{text-decoration:none}
-footer nav a:hover{color:var(--oro-hi)}
+footer nav a{display:inline-flex;align-items:center;min-height:44px}
+.visit dd a{display:inline-flex;align-items:center;min-height:44px}
+.perks a{display:inline-block;padding-block:12px;margin-block:-12px}
 footer .legal{flex-basis:100%;font-size:13px}
 
 /* ---------- Responsive ---------- */
@@ -348,14 +362,19 @@ footer .legal{flex-basis:100%;font-size:13px}
   .ev{grid-column:span 6}
   .ev.lead{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr)}
   .skeleton{grid-column:span 6}
-  .casa-grid,.visit,.reserve-in,.vdb-grid,.cumple-grid,.about{grid-template-columns:1fr}
+  .casa-grid,.visit,.reserve-in,.vdb-grid,.cumple-grid,.about{grid-template-columns:minmax(0,1fr)}
   .backbar{max-width:420px;width:100%;margin:0 auto}
+  /* abanico: alto ligado al ancho de la carta, sin hueco encima */
+  .hand{height:calc(var(--cw) * 1.62);margin-top:28px}
   .gallery{grid-template-columns:1fr 1fr;grid-auto-rows:clamp(170px,46vw,300px)}
   .hero-facts{grid-template-columns:1fr 1fr}
   .hero-facts li:nth-child(3){border-left:0}
 }
 @media(max-width:720px){
-  .stage{height:min(100vw,420px)}
+  .stage{height:max(240px,min(100vw,420px,calc(100vh - 68px - 400px)));height:max(240px,min(100vw,420px,calc(100svh - 68px - 400px)))}
+  .mark{font-size:clamp(18px,5.6vw,24px);gap:8px}
+  .top .wrap{gap:8px}
+  .top .btn{padding:0 14px}
   .hero h1{font-size:clamp(32px,9.2vw,42px)}
   .hero .lede{font-size:17px}
   .hero-cta .btn{flex:1 1 100%}
@@ -375,16 +394,34 @@ footer .legal{flex-basis:100%;font-size:13px}
   .ev.lead p{display:block;font-size:16px}
   .ev.lead h3{font-size:clamp(40px,12vw,56px)}
   .ev-days li{min-width:0;flex:1}
-  .hand{height:330px;margin-top:10px}
-  .hand img{width:128px}
+  /* abanico más cerrado para que las 4 cartas quepan sin cortarse */
+  .hand{--cw:clamp(112px,34vw,156px);margin-top:16px}
+  .hand img:nth-child(1){transform:rotate(-15deg)}
+  .hand img:nth-child(2){transform:rotate(-5deg)}
+  .hand img:nth-child(3){transform:rotate(5deg)}
+  .hand img:nth-child(4){transform:rotate(15deg)}
   .ev-date{flex-wrap:wrap;gap:6px 8px}
   .ev.past .ev-date::after{margin-left:0}
   .cumple-flyers figure:last-child{transform:translateY(-20px)}
   .gift{grid-template-columns:1fr}
-  .carta li{grid-template-columns:1fr auto}
+  .carta li{grid-template-columns:minmax(0,1fr) auto}
   .carta .dots{display:none}
   .clock-head{flex-direction:row-reverse;justify-content:flex-end}
   .seal{width:92px;height:92px}
+}
+/* Móvil horizontal / pantallas bajas: el arco del 70 a la izquierda, el texto y el CTA a la derecha,
+   todo dentro del primer pantallazo */
+@media (max-height:500px) and (orientation:landscape){
+  .hero{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);align-items:center}
+  .stage{grid-column:1;grid-row:1;align-self:stretch;height:auto;min-height:calc(100vh - 68px);min-height:calc(100svh - 68px - env(safe-area-inset-top,0px))}
+  .hero-copy{grid-column:2;grid-row:1;text-align:left;justify-items:start;gap:10px;padding:12px var(--gut-r) 12px 8px;margin:0;max-width:none}
+  .hero-sign{font-size:13px}
+  .hero h1{font-size:clamp(24px,3.9vw,36px);max-width:22ch}
+  .hero .lede{font-size:15px;line-height:1.5;max-width:52ch}
+  .hero-cta{justify-content:flex-start;margin-top:2px}
+  .hero-cta .btn{flex:0 1 auto;min-height:44px;padding:0 18px}
+  .hero-facts{grid-column:1/-1}
+  .drawer a{padding:10px 0;font-size:22px}
 }
 /* ---------- Movimiento ambiente (nada espera en opacity 0) ---------- */
 @media (prefers-reduced-motion:no-preference){
@@ -514,7 +551,7 @@ footer .legal{flex-basis:100%;font-size:13px}
   <section class="sec casa lit" id="casa" aria-labelledby="casa-title">
     <canvas class="lightfx" data-scene="ring" data-anchor="backbar" aria-hidden="true"></canvas>
     <div class="wrap casa-grid">
-      <figure class="backbar" id="backbarFig" style="margin:0">
+      <figure class="backbar" id="backbarFig">
         <div class="backbar-in" id="backbar" aria-hidden="true">
           <div class="shelf"></div><div class="shelf"></div><div class="shelf"></div><div class="shelf"></div>
           <span class="veil"></span>
@@ -814,10 +851,23 @@ footer .legal{flex-basis:100%;font-size:13px}
     burger.setAttribute("aria-expanded", open ? "true" : "false");
     burger.setAttribute("aria-label", open ? "Cerrar menú" : "Abrir menú");
     drawer.classList.toggle("open", open);
+    document.documentElement.style.overflow = open ? "hidden" : "";   // bloquea el scroll del fondo
+    if (open) { var f = drawer.querySelector("a"); if (f) setTimeout(function(){ f.focus({ preventScroll:true }); }, 30); }
   }
   burger.addEventListener("click", function(){ setMenu(burger.getAttribute("aria-expanded") !== "true"); });
   drawer.addEventListener("click", function(e){ if (e.target.closest("a")) setMenu(false); });
-  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && drawer.classList.contains("open")) { setMenu(false); burger.focus(); } });
+  document.addEventListener("keydown", function(e){
+    if (!drawer.classList.contains("open")) return;
+    if (e.key === "Escape") { setMenu(false); burger.focus(); return; }
+    if (e.key === "Tab") {   // foco atrapado entre el botón y los links del menú
+      var links = drawer.querySelectorAll("a"), first = links[0], last = links[links.length - 1];
+      if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); burger.focus(); }
+      else if (e.shiftKey && document.activeElement === burger) { e.preventDefault(); last.focus(); }
+    }
+  });
+  var mqDesk = window.matchMedia("(min-width: 861px)");
+  var closeOnDesk = function(){ if (mqDesk.matches && drawer.classList.contains("open")) setMenu(false); };
+  if (mqDesk.addEventListener) mqDesk.addEventListener("change", closeOnDesk); else if (mqDesk.addListener) mqDesk.addListener(closeOnDesk);
 
   /* Horario: hoy, abierto ahora y cuenta regresiva (hora de Medellín) */
   try {
@@ -905,13 +955,18 @@ footer .legal{flex-basis:100%;font-size:13px}
   ---------------------------------------------------------------------- */
   var HERO_LOOP = 20;
   function heroLayout(s){
-    var W = s.w, H = s.h, S = heroStage ? heroStage.offsetHeight : H * 0.6;
-    var mobile = W < 720;
-    var gh = S * (mobile ? 0.5 : 0.52);              // alto del 70
-    var cy = S * 0.56, cx = W / 2;
-    var archW = Math.min(gh * 1.55, W * (mobile ? 0.84 : 0.4));
-    var archH = S * 0.86, archTop = S * 0.08;
-    return { W:W, H:H, S:S, mobile:mobile, gh:gh, cx:cx, cy:cy, archW:archW, archH:archH, archTop:archTop };
+    // todo se mide contra el escenario (#stage): arriba a lo ancho en vertical,
+    // columna izquierda en móvil horizontal; así escala en cualquier proporción
+    var W = s.w, H = s.h;
+    var S = heroStage && heroStage.offsetHeight ? heroStage.offsetHeight : H * 0.6;
+    var sx = heroStage ? heroStage.offsetLeft : 0, sy = heroStage ? heroStage.offsetTop : 0;
+    var sw = heroStage && heroStage.offsetWidth ? heroStage.offsetWidth : W;
+    var mobile = sw < 720;
+    var gh = S * (mobile ? 0.5 : 0.52);              // alto máximo del 70 (el ancho lo ajusta samplePoints)
+    var cy = sy + S * 0.56, cx = sx + sw / 2;
+    var archW = Math.min(gh * 1.55, sw * (mobile ? 0.84 : 0.62));
+    var archH = S * 0.86, archTop = sy + S * 0.08;
+    return { W:W, H:H, S:S, sx:sx, sy:sy, sw:sw, mobile:mobile, gh:gh, cx:cx, cy:cy, archW:archW, archH:archH, archTop:archTop };
   }
   function samplePoints(L, n, seed){
     // contorno del 70 (Cinzel) medido en un canvas aparte
@@ -928,7 +983,8 @@ footer .legal{flex-basis:100%;font-size:13px}
       if (A(x-1,y) < 128 || A(x+1,y) < 128 || A(x,y-1) < 128 || A(x,y+1) < 128) edge.push(x, y);
       else if ((x + y * 7) % 23 === 0) fill.push(x, y);
     }
-    var sc = L.gh / (a + d), ox = L.cx - w * sc / 2, oy = L.cy - h * sc / 2;
+    // el 70 siempre cabe dentro del arco, sea cual sea la fuente (Cinzel es ancha) y la proporción
+    var sc = Math.min(L.gh / (a + d), L.archW * 0.76 / w), ox = L.cx - w * sc / 2, oy = L.cy - h * sc / 2;
     var pts = [], nArch = Math.round(n * 0.2), nFill = Math.round(n * 0.12), nEdge = n - nArch - nFill;
     function pick(arr){ var i = Math.floor(R() * arr.length / 2) * 2; return [ox + arr[i] * sc, oy + arr[i+1] * sc]; }
     for (var i = 0; i < nEdge && edge.length; i++) pts.push(pick(edge).concat([0]));
@@ -949,7 +1005,7 @@ footer .legal{flex-basis:100%;font-size:13px}
     var L = st.L || (st.L = heroLayout(s));
     var W = L.W, H = L.H, cx = L.cx;
     if (!st.parts){
-      var n = L.mobile ? 900 : 1700, R = rng(7070), pts = samplePoints(L, n, 70);
+      var n = Math.round(clamp(L.sw * L.S / 420, 700, 1700)), R = rng(7070), pts = samplePoints(L, n, 70);
       st.parts = pts.map(function(p){
         return { hx:p[0], hy:p[1], kind:p[2], fx:R(), fy:R(), ax:20 + R()*60, ay:14 + R()*40, nx:1 + Math.floor(R()*2), ny:1 + Math.floor(R()*2),
           ph:R()*TAU, ph2:R()*TAU, del:R()*1.6, z:0.35 + R()*0.65, tw:1 + Math.floor(R()*4) };
@@ -993,9 +1049,9 @@ footer .legal{flex-basis:100%;font-size:13px}
     // clave del arco
     c.save(); c.translate(cx, L.archTop - 9); c.rotate(Math.PI / 4); c.fillStyle = gold(0.3 + 0.4 * form); c.fillRect(-3, -3, 6, 6); c.restore();
     // piso
-    var pl = c.createLinearGradient(cx - W * 0.3, 0, cx + W * 0.3, 0);
+    var pl = c.createLinearGradient(cx - L.sw * 0.3, 0, cx + L.sw * 0.3, 0);
     pl.addColorStop(0, goldM(0)); pl.addColorStop(0.5, gold(0.18 + 0.2 * form)); pl.addColorStop(1, goldM(0));
-    c.fillStyle = pl; c.fillRect(cx - W * 0.3, L.archTop + L.archH, W * 0.6, 1);
+    c.fillStyle = pl; c.fillRect(cx - L.sw * 0.3, L.archTop + L.archH, L.sw * 0.6, 1);
 
     // brillo especular que cruza en diagonal (luz sobre metal pulido)
     var su = (t - 10) / 3.2, sweepOn = su > 0 && su < 1;
@@ -1008,8 +1064,8 @@ footer .legal{flex-basis:100%;font-size:13px}
       p = st.parts[i];
       e = ss(4 + p.del, 9 + p.del * 0.3, t) * (1 - ss(14 + p.del * 0.6, 19.2, t));
       if (p.kind === 2) e *= 0.85;
-      var fxp = p.fx * W + Math.sin(tt * p.nx + p.ph) * p.ax;
-      var fyp = p.fy * L.S * 1.02 + Math.cos(tt * p.ny + p.ph2) * p.ay;
+      var fxp = L.sx + p.fx * L.sw + Math.sin(tt * p.nx + p.ph) * p.ax;
+      var fyp = L.sy + p.fy * L.S * 1.02 + Math.cos(tt * p.ny + p.ph2) * p.ay;
       var jx = Math.sin(tt * 3 + p.ph) * 0.8, jy = Math.cos(tt * 2 + p.ph2) * 0.8;
       x = fxp + (p.hx + jx - fxp) * e; y = fyp + (p.hy + jy - fyp) * e;
       var tw = 0.55 + 0.45 * Math.sin(tt * p.tw + p.ph);
@@ -1019,7 +1075,7 @@ footer .legal{flex-basis:100%;font-size:13px}
         var dd = (x + (y - L.cy) * 0.6) - sx0, band = Math.exp(-(dd * dd) / (L.gh * L.gh * 0.02));
         al += 0.85 * band * Math.sin(Math.PI * su);
       }
-      if (y > L.S * 1.0) al *= Math.max(0, 1 - (y - L.S) / 40);
+      if (y > L.sy + L.S) al *= Math.max(0, 1 - (y - L.sy - L.S) / 40);
       if (al < 0.02) continue;
       sz = (p.kind === 0 ? 1.45 : 1.0) * (0.6 + p.z * 0.7);
       c.fillStyle = gold(Math.min(0.95, al));
@@ -1027,8 +1083,8 @@ footer .legal{flex-basis:100%;font-size:13px}
     }
     // bokeh muy tenue en primer plano (deriva lenta)
     for (var bi = 0; bi < st.bokeh.length; bi++){
-      var bk = st.bokeh[bi], span = W + bk.r * 4;
-      var bx = frac(bk.ph + bk.k * t / HERO_LOOP) * span - bk.r * 2, by = bk.y * L.S;
+      var bk = st.bokeh[bi], span = L.sw + bk.r * 4;
+      var bx = L.sx + frac(bk.ph + bk.k * t / HERO_LOOP) * span - bk.r * 2, by = L.sy + bk.y * L.S;
       var bg = c.createRadialGradient(bx, by, bk.r * 0.15, bx, by, bk.r);
       bg.addColorStop(0, gold(bk.a * 0.5)); bg.addColorStop(0.75, gold(bk.a)); bg.addColorStop(1, goldM(0));
       c.fillStyle = bg; c.beginPath(); c.arc(bx, by, bk.r, 0, TAU); c.fill();
@@ -1165,7 +1221,9 @@ footer .legal{flex-basis:100%;font-size:13px}
     if (d && cv.getContext) makeScene(cv, d, { maxDpr:1.5 });
   });
 
-  var t0 = performance.now() - 9000, frozen = null, raf = 0;
+  // arranca con el 70 ya formado (t=11 s: todas las motas en su sitio, antes del brillo)
+  var T_START = 11;
+  var t0 = performance.now() - T_START * 1000, frozen = null, raf = 0;
   function now(){ return frozen != null ? frozen : ((performance.now() - t0) / 1000) % 60; }
   function drawScene(s, t){ try { s.draw(s, s.opts.hero ? t % HERO_LOOP : t % LOOP); } catch(e){ /* una escena no tumba a las demás */ } }
   function drawAll(t, force){ for (var i = 0; i < scenes.length; i++){ var s = scenes[i]; if (force || s.visible) drawScene(s, t); } }
@@ -1174,7 +1232,7 @@ footer .legal{flex-basis:100%;font-size:13px}
   function schedule(){ if (!raf && !reduce && frozen == null && !document.hidden) raf = requestAnimationFrame(tick); }
 
   relayout();
-  drawAll(reduce ? 11 : 0, true);   // primer cuadro ya completo; con movimiento reducido, el 70 formado
+  drawAll(T_START, true);   // primer cuadro ya completo, con el 70 formado (también con movimiento reducido)
 
   if ("IntersectionObserver" in window){
     var io = new IntersectionObserver(function(entries){
@@ -1184,8 +1242,23 @@ footer .legal{flex-basis:100%;font-size:13px}
   }
   document.addEventListener("visibilitychange", function(){ if (document.hidden){ if (raf) cancelAnimationFrame(raf); raf = 0; } else schedule(); });
   var rt = 0;
-  window.addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(function(){ relayout(); drawAll(now(), true); }, 120); });
-  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ relayout(); drawAll(reduce ? 11 : now(), true); });
+  function refit(){ relayout(); drawAll(reduce ? T_START : now(), true); }
+  window.addEventListener("resize", function(){ clearTimeout(rt); rt = setTimeout(refit, 120); });
+  // tamaño ligado al contenedor: cambios de alto del hero/secciones (fuentes, rotación, barra de URL) re-ajustan
+  if ("ResizeObserver" in window){
+    var lastSz = new WeakMap();
+    var ro = new ResizeObserver(function(entries){
+      var changed = false;
+      entries.forEach(function(en){
+        var r = en.contentRect, k = Math.round(r.width) + "x" + Math.round(r.height);
+        if (lastSz.get(en.target) !== k){ if (lastSz.has(en.target)) changed = true; lastSz.set(en.target, k); }
+      });
+      if (changed){ clearTimeout(rt); rt = setTimeout(refit, 120); }
+    });
+    scenes.forEach(function(s){ ro.observe(s.cv); });
+    if (heroStage) ro.observe(heroStage);
+  }
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(refit);
   schedule();
 
   // Hook de revisión: congelar en un instante del loop (capturas y medición de brillo)
