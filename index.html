@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Noches Previews</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700;900&family=Figtree:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: lista vertical de cuatro "bandas" con el color de cada club; fondo neutro tinta */
+:root{--ink:#0d0b10;--paper:#f3eee8;--mute:#9a929f;--line:#ffffff1f;--display:"Big Shoulders Display",Impact,"Arial Narrow",sans-serif;--body:Figtree,system-ui,sans-serif;color-scheme:dark}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ink);color:var(--paper);font:16px/1.55 var(--body)}
+.wrap{max-width:1180px;margin:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+header .wrap{padding-block:28px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--mute);border-bottom:1px solid var(--line)}
+.intro{padding-block:9vh 6vh;display:grid;gap:20px}
+h1{font-family:var(--display);font-weight:900;font-size:clamp(56px,10vw,132px);line-height:.85;letter-spacing:-.01em;margin:0;text-transform:uppercase;text-wrap:balance}
+.intro p{max-width:60ch;color:#c9c1cc;margin:0;font-size:18px}
+.list{display:grid;gap:12px;padding-block:0 10vh}
+.club{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) auto;align-items:center;gap:24px;padding:28px clamp(18px,3vw,36px);border-radius:6px;text-decoration:none;color:var(--fg);background:var(--bg);position:relative;overflow:hidden;transition:transform .25s ease}
+.club:hover{transform:translateY(-3px)}
+.club:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+.club b{font-family:var(--display);font-weight:900;font-size:clamp(40px,6vw,76px);line-height:.9;text-transform:uppercase;display:block}
+.club small{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;opacity:.75;margin-bottom:10px}
+.club p{margin:0;font-size:14px;opacity:.85;max-width:44ch}
+.sw{display:flex;gap:6px;flex-wrap:wrap}
+.sw i{width:26px;height:26px;border-radius:50%;border:1px solid #ffffff33;display:block}
+.go{font-size:12px;letter-spacing:.16em;text-transform:uppercase;white-space:nowrap;border:1px solid currentColor;padding:12px 16px;border-radius:999px}
+.tutaina{--bg:radial-gradient(120% 140% at 85% 10%,#ff2e93,#2f5bff 35%,#170b38 70%);--fg:#fee003}
+.cantina{--bg:radial-gradient(120% 140% at 85% 10%,#3d2e14,#030303 60%);--fg:#e9cf91}
+.medallo{--bg:radial-gradient(120% 140% at 85% 10%,#13206a,#050a24 60%);--fg:#f4f6ff}
+.logia{--bg:radial-gradient(120% 140% at 85% 10%,#39251f,#0e0a08 60%);--fg:#f4efe5}
+.note{border-top:1px solid var(--line);padding-block:28px 40px;color:var(--mute);font-size:14px;display:grid;gap:8px}
+.note strong{color:var(--paper);font-weight:600}
+@media (max-width:760px){.club{grid-template-columns:1fr;gap:16px}.go{justify-self:start}}
+@media (prefers-reduced-motion:reduce){.club{transition:none}.club:hover{transform:none}}
+</style></head>
+<body>
+<header><div class="wrap"><span>Noches · preview</span><span>4 sitios · v3</span></div></header>
+<main class="wrap">
+  <section class="intro">
+    <h1>Cuatro clubes.<br>Cuatro noches.</h1>
+    <p>Rediseño de cada sitio con su identidad, fotos oficiales y una agenda que se alimenta sola de lo que cada club publica en Instagram.</p>
+  </section>
+  <nav class="list" aria-label="Clubes">
+    <a class="club tutaina" href="tutaina/index.html"><div><small>Pereira · Eje Cafetero</small><b>Tutaina</b></div><div><div class="sw"><i style="background:#fee003"></i><i style="background:#ff2e93"></i><i style="background:#2f5bff"></i><i style="background:#ff7a1a"></i><i style="background:#1fd17a"></i><i style="background:#170b38"></i></div></div><span class="go">Ver sitio ↗</span></a>
+    <a class="club medallo" href="medallo/index.html"><div><small>Medellín</small><b>Medallo Club</b></div><div><div class="sw"><i style="background:#00030d"></i><i style="background:#0543be"></i><i style="background:#2448ff"></i><i style="background:#00b2ff"></i><i style="background:#8fb4ff"></i></div></div><span class="go">Ver sitio ↗</span></a>
+    <a class="club logia" href="la-logia/index.html"><div><small>Medellín</small><b>La Logia</b></div><div><div class="sw"><i style="background:#0e0a08"></i><i style="background:#643828"></i><i style="background:#c29765"></i><i style="background:#d6aa70"></i><i style="background:#f4efe5"></i></div></div><span class="go">Ver sitio ↗</span></a>
+    <a class="club cantina" href="cantina-70/index.html"><div><small>Medellín · La 70</small><b>Cantina 70</b></div><div><div class="sw"><i style="background:#030303"></i><i style="background:#7c5c27"></i><i style="background:#c9a35f"></i><i style="background:#f2dfae"></i><i style="background:#f3ebdc"></i></div></div><span class="go">Ver sitio ↗</span></a>
+  </nav>
+  <section class="note">
+    <p><strong>Fotos:</strong> se cargan desde los sitios oficiales. En este preview se ven bloques de color en su lugar; en el sitio publicado aparecen las fotos reales.</p>
+    <p><strong>Agenda:</strong> cuando se conecte el token de Instagram de cada club, los flyers nuevos aparecen en la web en menos de 10 minutos. Por ahora se muestra la agenda de referencia.</p>
+  </section>
+</main>
+</body></html>
