@@ -41,7 +41,12 @@
 
   function load(opts) {
     var club = opts.club, fallback = opts.fallback || [];
-    if (location.protocol === "file:") return Promise.resolve(fallbackResult(fallback));
+    // Hosts estáticos sin la función /api (servidor local, GitHub Pages, previews):
+    // no se pide nada para no ensuciar la consola con un 404. Si se define
+    // window.IG_EVENTS_ENDPOINT, se usa siempre.
+    var STATIC_HOST = /^(localhost|127\.0\.0\.1|\[::1\]|0\.0\.0\.0)$|\.github\.io$|\.claudeusercontent\.com$|^claude\.ai$/i;
+    if (location.protocol === "file:" || (!window.IG_EVENTS_ENDPOINT && STATIC_HOST.test(location.hostname)))
+      return Promise.resolve(fallbackResult(fallback));
     var cached = readCache(club);
     if (cached) return Promise.resolve(Object.assign({}, cached, { events: recompute(cached.events) }));
 

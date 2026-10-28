@@ -312,7 +312,8 @@ ul,ol{padding:0;list-style:none}
 .club-photos{margin-top:clamp(64px,8vw,112px);align-items:start;row-gap:16px}
 .cp-a{grid-column:1 / span 7;aspect-ratio:4/3}
 .cp-b{grid-column:9 / -1;aspect-ratio:4/5;margin-top:clamp(40px,10vw,160px)}
-.club-photos figcaption{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;color:var(--ink);background:linear-gradient(0deg,var(--scrim),transparent)}
+.club-photos figcaption,.shot figcaption{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;white-space:nowrap!important;border:0!important;background:none!important}
+.x-old-cap{position:absolute;left:0;right:0;bottom:0;padding:14px 16px;font-size:14px;color:var(--ink);background:linear-gradient(0deg,var(--scrim),transparent)}
 .figures{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:24px;margin-top:clamp(64px,8vw,112px)}
 .figures dt{font:700 clamp(40px,4.4vw,64px)/1 var(--display);font-stretch:75%}
 .figures dt.mono{font:500 clamp(30px,3.3vw,48px)/1.25 var(--mono);letter-spacing:-.03em}
@@ -402,6 +403,25 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none!important;transition-duration:.01ms!important}
 }
+
+/* música ambiente (../shared/ambient.js) */
+.amb{position:fixed;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:45;display:inline-flex;align-items:center;justify-content:center;gap:10px;min-width:44px;min-height:44px;margin:0;padding:0 14px;background:var(--bg);border:1px solid var(--rule);border-radius:0;color:var(--muted);font:500 14px/1 var(--text);cursor:pointer;-webkit-tap-highlight-color:transparent;touch-action:manipulation;transition:color .2s ease,border-color .2s ease,opacity .2s ease}
+.amb[hidden]{display:none}
+.amb.amb--away{opacity:0;pointer-events:none}.amb.amb--away:focus-visible{opacity:1;pointer-events:auto}
+.amb-eq{display:inline-flex;align-items:flex-end;gap:2px;width:14px;height:14px;flex:none}
+.amb-eq i{flex:1;height:100%;background:currentColor;transform-origin:50% 100%;transform:scaleY(.28);transition:transform .3s ease}
+.amb-eq i:nth-child(2){transform:scaleY(.5)}.amb-eq i:nth-child(3){transform:scaleY(.36)}.amb-eq i:nth-child(4){transform:scaleY(.2)}
+.amb[aria-pressed="true"]{color:var(--ink)}
+.amb[aria-pressed="true"] .amb-eq{color:var(--accent)}
+.amb[aria-pressed="true"] .amb-eq i{animation:amb-eq .9s ease-in-out infinite alternate}
+.amb[aria-pressed="true"] .amb-eq i:nth-child(2){animation-duration:.66s;animation-delay:-.3s}
+.amb[aria-pressed="true"] .amb-eq i:nth-child(3){animation-duration:1.1s;animation-delay:-.5s}
+.amb[aria-pressed="true"] .amb-eq i:nth-child(4){animation-duration:.78s;animation-delay:-.15s}
+@keyframes amb-eq{0%{transform:scaleY(.2)}100%{transform:scaleY(1)}}
+.amb[data-state="ready"]::after{content:"";position:absolute;top:6px;right:6px;width:5px;height:5px;border-radius:50%;background:var(--accent)}
+@media(hover:hover) and (pointer:fine){.amb:hover{color:var(--ink);border-color:rgba(242,240,234,.38)}}
+@media(max-width:899px){.amb{padding:0;width:44px}.amb-lbl{display:none}}
+@media(prefers-reduced-motion:reduce){.amb,.amb-eq i{transition:none}.amb[aria-pressed="true"] .amb-eq i{animation:none!important}.amb[aria-pressed="true"] .amb-eq i:nth-child(1){transform:scaleY(.6)}.amb[aria-pressed="true"] .amb-eq i:nth-child(2){transform:scaleY(1)}.amb[aria-pressed="true"] .amb-eq i:nth-child(3){transform:scaleY(.75)}.amb[aria-pressed="true"] .amb-eq i:nth-child(4){transform:scaleY(.45)}}
 </style>
 </head>
 <body>
@@ -416,7 +436,7 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
     <nav class="nav" id="nav" aria-label="Secciones">
       <div>
         <div class="nav-links">
-          <a class="ul" href="#agenda">Agenda</a><a class="ul" href="#archivo">Archivo</a><a class="ul" href="#club">El club</a><a class="ul" href="#galeria">Galería</a><a class="ul" href="#ubicacion">Ubicación</a>
+          <a class="ul" href="#agenda">Agenda</a><a class="ul" href="#archivo">Eventos</a><a class="ul" href="#club">El club</a><a class="ul" href="#galeria">Galería</a><a class="ul" href="#ubicacion">Ubicación</a>
         </div>
         <p class="sheet-extra">Jueves a sábado, <span class="mono">9:30 PM – 4:00 AM</span><br>WhatsApp <a href="https://wa.me/573011265132?text=Hola%20Tutaina%2C%20quiero%20reservar%20una%20noche%20en%20Pereira." target="_blank" rel="noopener">+57 301 126 5132</a></p>
       </div>
@@ -471,7 +491,7 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
   <section class="sec f-surface" id="archivo" aria-labelledby="arch-h">
     <div class="wrap">
       <div class="grid sec-head">
-        <h2 class="h2" id="arch-h">Archivo de noches</h2>
+        <h2 class="h2" id="arch-h">Eventos</h2>
         <div class="sec-aside">
           <p class="muted">Lo mejor de nuestras noches: eventos pasados en Tutaina Eje Cafetero, tal como se anunciaron.</p>
           <div class="years" id="years" role="group" aria-label="Filtrar por año"></div>
@@ -606,6 +626,10 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
     <div class="copy"><span>Tutaina Eje Cafetero © 2026. Todos los derechos reservados.</span><span>Pereira, Risaralda</span></div>
   </div>
 </footer>
+
+<button class="amb" type="button" data-ambient="tutaina" data-music data-state="off" aria-expanded="false" aria-label="Abrir reproductor de música"><span class="amb-eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="amb-lbl">Música</span></button>
+<script src="../shared/ambient.js" defer></script>
+<script src="../shared/music.js" defer></script>
 
 <script src="../shared/ig-events.js"></script>
 <script>
@@ -786,7 +810,7 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
   }
   function byDateDesc(a,b){return (Date.parse(b.date)||0)-(Date.parse(a.date)||0);}
   function plate(e){
-    return '<span class="plate-c" aria-hidden="true"><span class="plate-t">'+esc(e.title)+'</span><span class="plate-d">'+esc(e.dateLabel||"Archivo")+'</span></span>';
+    return '<span class="plate-c" aria-hidden="true"><span class="plate-t">'+esc(e.title)+'</span><span class="plate-d">'+esc(e.dateLabel||"Evento")+'</span></span>';
   }
   function flyer(e, opts){
     opts = opts || {};
@@ -824,7 +848,7 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
     var rest = up.slice(1).concat(past).slice(0, RECENT);
     heroStack(main, rest); ticker(up);
     if(rest.length){
-      html += '<div class="sub-h"><h3 class="h3">'+(up.length>1?'Más noches':'Noches recientes')+'</h3><a class="ul muted" href="#archivo">Ver archivo completo</a></div><ul class="flyers">';
+      html += '<div class="sub-h"><h3 class="h3">'+(up.length>1?'Más noches':'Noches recientes')+'</h3><a class="ul muted" href="#archivo">Ver todos los eventos</a></div><ul class="flyers">';
       rest.forEach(function(e){ html += flyer(e,{state:true}); });
       html += '</ul>';
     }
@@ -924,7 +948,7 @@ footer{background:var(--surface);padding-top:clamp(64px,8vw,104px);padding-botto
     wall.innerHTML = list.map(function(e,i){ return flyer(e,{cls: i>=WALL_FIRST ? "more" : ""}); }).join("");
     wallBtn.hidden = list.length <= WALL_FIRST;
     wallBtn.setAttribute("aria-expanded", open ? "true" : "false");
-    wallBtn.textContent = open ? "Ver menos" : "Ver más noches ("+(list.length-WALL_FIRST)+")";
+    wallBtn.textContent = open ? "Ver menos" : "Ver más eventos ("+(list.length-WALL_FIRST)+")";
   }
   yearsEl.addEventListener("click", function(e){
     var b = e.target.closest("button"); if(!b) return;
