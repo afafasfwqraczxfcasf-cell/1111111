@@ -29,4 +29,4 @@ Solo: entrada suave del bloque de portada (14px, .9s), zoom 1.025 en hover de fl
 Corta y concreta, como el community manager: datos (horario, dirección, cómo reservar, qué no se permite) en vez de adjetivos. Prohibido: "experiencia", "alto nivel", "seguro y controlado", "atención personalizada", "la mejor rumba", cifras sueltas tipo "10+ años" en fila.
 
 ## Conservado
-Wordmark con corona sobre la A + "EJE CAFETERO" en el nav, FALLBACK_ARRAY + `IGEvents`, JSON-LD (NightClub, Event estático y `#ld-events` dinámico), h1 único, alts, píldora de música (`shared/music.js` + `ambient.js`), menú móvil con foco atrapado y Escape, safe areas, objetivos ≥44px.
+Wordmark con corona sobre la A + "EJE CAFETERO" en el nav, FALLBACK_ARRAY + `IGEvents`, JSON-LD (NightClub, Event estático y `#ld-events` dinámico), h1 único, alts, menú móvil con foco atrapado y Escape, safe areas, objetivos ≥44px.

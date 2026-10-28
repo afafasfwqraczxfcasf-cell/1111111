@@ -31,4 +31,4 @@ Pedidos del cliente: solo negro y dorado en la interfaz (nada de rojo, crema o v
 Radio 0. Sin sombras. Un solo hover: zoom 1.03 del flyer en la agenda (solo puntero fino) y cambio de tono del botón. Nada de canvas, marquees, sellos, contadores ni badges. `prefers-reduced-motion` quita transiciones.
 
 ## No tocar
-`FALLBACK_ARRAY` + contrato `IGEvents.load({club, fallback})`, permalinks, JSON-LD (estático y dinámico), píldora de música (`shared/music.js`, `ambient.js`).
+`FALLBACK_ARRAY` + contrato `IGEvents.load({club, fallback})`, permalinks, JSON-LD (estático y dinámico).
