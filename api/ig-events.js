@@ -10,8 +10,6 @@
  *
  * Variables de entorno por club (SLUG en mayúsculas, guiones -> _):
  *   IG_TOKEN_TUTAINA       token de larga duración (60 días, se renueva con /api/ig-refresh)
- *   IG_TOKEN_MEDALLO
- *   IG_TOKEN_LA_LOGIA
  *   IG_TOKEN_CANTINA_70
  * Opcional (si se usa Upstash/Vercel KV para guardar tokens renovados):
  *   KV_REST_API_URL, KV_REST_API_TOKEN
@@ -20,8 +18,6 @@ const { postsToEvents } = require("../shared/ig-parse.js");
 
 const CLUBS = {
   "tutaina":    { handle: "tutaina.ejecafetero" },
-  "medallo":    { handle: "medalloclub.mde" },
-  "la-logia":   { handle: "lalogia.med" },
   "cantina-70": { handle: "cantina70.med" }
 };
 const GRAPH = "https://graph.instagram.com/v21.0";

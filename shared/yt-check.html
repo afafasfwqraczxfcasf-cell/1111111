@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Diagnóstico YouTube</title>
+<style>
+:root{
+  color-scheme:light dark;
+  --bg:#f6f5f2;--surface:#fff;--ink:#16150f;--muted:#5f5b52;--rule:#dcd8cf;--ok:#1d6b3a;--bad:#a1281e;--wait:#7a5d00;--accent:#16150f;--on-accent:#fff;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#111110;--surface:#1a1a18;--ink:#f1efe9;--muted:#a8a397;--rule:#33322e;--ok:#5fcf8a;--bad:#ff8a7a;--wait:#e0c060;--accent:#f1efe9;--on-accent:#111110}}
+:root[data-theme="dark"]{--bg:#111110;--surface:#1a1a18;--ink:#f1efe9;--muted:#a8a397;--rule:#33322e;--ok:#5fcf8a;--bad:#ff8a7a;--wait:#e0c060;--accent:#f1efe9;--on-accent:#111110}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--font)}
+main{max-width:1000px;margin:0 auto;padding:24px 16px 64px}
+h1{font-size:24px;margin:0 0 4px}
+h2{font-size:18px;margin:32px 0 8px}
+p{margin:0 0 12px;color:var(--muted);max-width:68ch}
+.bar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:16px 0}
+button{min-height:44px;padding:0 16px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);font:600 14px var(--font);cursor:pointer;border-radius:4px}
+button.primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+button:disabled{opacity:.5;cursor:default}
+button:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+#status{font-variant-numeric:tabular-nums}
+.wrap{overflow-x:auto;border:1px solid var(--rule);background:var(--surface)}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--rule);vertical-align:top}
+th{font-weight:600;color:var(--muted)}
+td.r{white-space:nowrap;font-weight:600}
+.ok{color:var(--ok)}.bad{color:var(--bad)}.wait{color:var(--wait)}
+code{font-size:13px}
+#stage{position:fixed;right:16px;bottom:16px;width:200px;height:200px;border:1px solid var(--rule);background:#000}
+#stage>*{width:200px;height:200px;display:block}
+@media(max-width:600px){#stage{position:static;margin:16px 0}}
+</style>
+</head>
+<body>
+<main>
+  <h1>Diagnóstico de videos de YouTube</h1>
+  <p>Prueba cada video de <code>playlists.json</code> en el reproductor insertado (silenciado, de a uno, 8&nbsp;s máximo) y marca si el dueño permite insertarlo en otros sitios. Ábrela desde el mismo dominio donde viven las páginas de los clubes.</p>
+  <div class="bar">
+    <button class="primary" id="run" type="button" disabled>Probar todos</button>
+    <button id="copy" type="button" disabled>Copiar resultado (JSON)</button>
+    <span id="status" role="status" aria-live="polite">Cargando lista…</span>
+  </div>
+  <div id="out"></div>
+  <div id="stage" aria-hidden="true"><div id="probe"></div></div>
+</main>
+<script>
+(function () {
+  "use strict";
+  var LIST = null, RES = {}, ytReady = false, running = false;
+  var $ = function (id) { return document.getElementById(id); };
+  var CODES = { 2: "parámetro inválido", 5: "error HTML5", 100: "no existe o es privado", 101: "inserción desactivada", 150: "inserción desactivada", 153: "falta referer / bloqueado" };
+
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); }
+  function status(t) { $("status").textContent = t; }
+
+  function draw() {
+    var h = "";
+    Object.keys(LIST).forEach(function (club) {
+      var rows = LIST[club], ok = 0;
+      rows.forEach(function (t) { var r = RES[t.id]; if (r && r.ok) ok++; });
+      h += "<h2>" + esc(club) + ' <span style="font-weight:400;color:var(--muted)">· ' + ok + " / " + rows.length + " se pueden insertar</span></h2>";
+      h += '<div class="wrap"><table><thead><tr><th>#</th><th>Título</th><th>Canal</th><th>ID</th><th>Resultado</th></tr></thead><tbody>';
+      rows.forEach(function (t, i) {
+        var r = RES[t.id], cell = '<span class="wait">pendiente</span>';
+        if (r) cell = r.ok ? '<span class="ok">✅ se puede insertar</span>'
+          : r.code === "timeout" ? '<span class="wait">⏱ sin respuesta (8 s)</span>'
+          : '<span class="bad">❌ ' + esc(r.code) + (CODES[r.code] ? " · " + CODES[r.code] : "") + "</span>";
+        h += "<tr><td>" + (i + 1) + "</td><td>" + esc(t.title) + "</td><td>" + esc(t.channel) + '</td><td><a href="https://www.youtube.com/watch?v=' + encodeURIComponent(t.id) + '" target="_blank" rel="noopener"><code>' + esc(t.id) + '</code></a></td><td class="r">' + cell + "</td></tr>";
+      });
+      h += "</tbody></table></div>";
+    });
+    $("out").innerHTML = h;
+  }
+
+  function probe(id) {
+    return new Promise(function (resolve) {
+      var done = false, player = null;
+      var slot = document.createElement("div"); $("stage").innerHTML = ""; $("stage").appendChild(slot);
+      function finish(r) {
+        if (done) return; done = true; clearTimeout(to);
+        try { player && player.destroy(); } catch (e) {}
+        resolve(r);
+      }
+      var to = setTimeout(function () { finish({ ok: false, code: "timeout" }); }, 8000);
+      try {
+        player = new YT.Player(slot, {
+          host: "https://www.youtube-nocookie.com", width: 200, height: 200, videoId: id,
+          playerVars: { autoplay: 1, mute: 1, playsinline: 1, rel: 0, modestbranding: 1, origin: location.origin },
+          events: {
+            onReady: function (e) { try { e.target.mute(); e.target.playVideo(); } catch (x) {} },
+            onStateChange: function (e) { if (e.data === 1) finish({ ok: true }); },
+            onError: function (e) { finish({ ok: false, code: e.data }); }
+          }
+        });
+      } catch (e) { finish({ ok: false, code: "api" }); }
+    });
+  }
+
+  function run() {
+    if (running || !ytReady || !LIST) return;
+    running = true; $("run").disabled = true; RES = {}; draw();
+    var queue = [];
+    Object.keys(LIST).forEach(function (c) { LIST[c].forEach(function (t) { queue.push(t); }); });
+    var n = 0;
+    (function step() {
+      if (!queue.length) { running = false; $("run").disabled = false; $("copy").disabled = false; status("Listo: " + n + " videos probados."); $("stage").innerHTML = ""; return; }
+      var t = queue.shift(); n++;
+      status("Probando " + n + "… " + t.title);
+      probe(t.id).then(function (r) { RES[t.id] = r; draw(); setTimeout(step, 300); });
+    })();
+  }
+
+  function result() {
+    var out = {};
+    Object.keys(LIST).forEach(function (c) {
+      out[c] = LIST[c].map(function (t) { var r = RES[t.id] || {}; return { id: t.id, title: t.title, channel: t.channel, ok: !!r.ok, code: r.ok ? null : (r.code == null ? "pendiente" : r.code) }; });
+    });
+    return JSON.stringify({ checkedAt: new Date().toISOString(), origin: location.origin, userAgent: navigator.userAgent, clubs: out }, null, 2);
+  }
+  function copy() {
+    var txt = result();
+    function fallback() {
+      var ta = document.createElement("textarea"); ta.value = txt; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      document.body.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(ta); status(ok ? "Resultado copiado." : "No se pudo copiar automáticamente.");
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(function () { status("Resultado copiado."); }, fallback);
+    else fallback();
+  }
+
+  $("run").addEventListener("click", run);
+  $("copy").addEventListener("click", copy);
+
+  fetch("playlists.json", { cache: "no-store" }).then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
+    .then(function (j) { LIST = j; draw(); ready(); })
+    .catch(function () { status("No se pudo leer playlists.json (ábrela desde el servidor, junto a ese archivo)."); });
+
+  function ready() { if (LIST && ytReady) { $("run").disabled = false; status("Lista y YouTube listos. Pulsa “Probar todos”."); } }
+  window.onYouTubeIframeAPIReady = function () { ytReady = true; ready(); };
+  var s = document.createElement("script"); s.src = "https://www.youtube.com/iframe_api";
+  s.onerror = function () { status("No se pudo cargar la API de YouTube en esta red."); };
+  document.head.appendChild(s);
+  setTimeout(function () { if (!ytReady) status("La API de YouTube no respondió en 8 s."); }, 8000);
+})();
+</script>
+</body>
+</html>

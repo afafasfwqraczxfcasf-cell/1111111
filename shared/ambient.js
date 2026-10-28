@@ -10,7 +10,7 @@
  * Nunca hay autoplay: suena solo tras un gesto. Si el usuario lo había activado
  * (localStorage), el botón queda en estado "ready" y arranca en el primer clic/tap.
  *
- * Con data-music en el botón, ../shared/music.js toma el botón (reproductor de YouTube) y este
+ * Con data-music en el botón, ../shared/music.js toma el botón (píldora: MP3 locales o, si no hay, este motor) y este
  * motor queda como respaldo: no se enlaza al clic y avisa su estado con el evento "ambient:state".
  *
  * API: Ambient.start(), Ambient.stop(), Ambient.toggle(), Ambient.state(), Ambient.supported,
@@ -317,95 +317,6 @@
       if (sec >= 8 && e.vari.mel && bar % 2 === 0 && (s === 0 || s === 3 || s === 7 || s === 10) && R() > 0.12) {
         var k = [3, 2, 1, 2][[0, 3, 7, 10].indexOf(s)];
         I.pluck(g, jit(t, 4), ch.n[k] + 12, hum(0.15), { bright: 0.8, decay: 0.994, send: 0.3, pan: -0.25, len: 1.3 });
-      }
-    }
-  };
-
-  /* Medallo — perreo/trap oscuro de Provenza: 808 con glide, hats con rolls, pad frío, Do menor */
-  PRESETS.medallo = {
-    bpm: 90, swing: 0.06, lp: 7000, delay: 0.75, fb: 0.38, wet: 0.42, delayLp: 2100, breath: 26,
-    prog: ["Cm", "Ab", "Eb", "Bb", "Cm", "Ab", "Eb", "Bb", "Fm", "Ab", "Cm", "G", "Fm", "Ab", "Bb", "Bb"],
-    ch: {
-      Cm: { b: 36, n: [60, 63, 67, 70] }, Ab: { b: 32, n: [56, 60, 63, 67] }, Eb: { b: 39, n: [55, 58, 63, 67] },
-      Bb: { b: 34, n: [53, 58, 62, 65] }, Fm: { b: 41, n: [56, 60, 65, 68] }, G: { b: 43, n: [55, 59, 62, 67] }
-    },
-    mel: [72, 75, 79, 77, 75, 72, 70, 67],
-    bar: function (e, bar, t, bd) {
-      if (samePrev(this, bar)) return;
-      var ch = chordAt(this, bar), n = runLen(this, bar), lf = e.lfo(t);
-      I.pad(e.g, t, ch.n, bd * n - 0.05, 0.15, { type: "sawtooth", cut: 380 + 300 * lf, peak: 900 + 700 * lf, det: 9, atk: 0.7, rel: 1, send: 0.4, pan: -0.1 });
-    },
-    step: function (e, bar, s, t, sd) {
-      var g = e.g, P = this, ch = chordAt(P, bar), nx = chordAt(P, bar + 1), fill = bar % 8 === 7, drop = e.isDrop(bar);
-      var o8 = { type: "sine", drive: 1.6, cut: 850, sus: 0.75 };
-      if (s === 0) I.bass(g, t, ch.b, sd * 6, hum(0.6, 0.04), o8);
-      else if (s === 7) I.bass(g, t, ch.b, sd * 2, hum(0.42), o8);
-      else if (s === 10) {
-        var o = { type: "sine", drive: 1.6, cut: 850, sus: 0.75 };
-        if (fill || (bar % 2 === 1 && nx.b !== ch.b)) o.glide = { to: fill ? ch.b - 12 : nx.b, at: sd * 3, time: sd * 2.2 };
-        else if (R() < 0.4) { o.from = ch.b + 12; o.fromTime = 0.09; }
-        I.bass(g, t, ch.b, sd * 5.5, hum(0.5, 0.05), o);
-      }
-      if (!drop && (s === 0 || s === 10)) I.kick(g, t, hum(0.7, 0.05), { f0: 140, f1: 52, dec: 0.13 });
-      if ((s === 3 || s === 6 || s === 11 || s === 14) && !(fill && s >= 12))
-        I.snare(g, jit(t, 2), hum(s === 6 || s === 14 ? 0.3 : 0.24), { freq: 1500, tone: 175, dec: 0.1 });
-      /* hats: corcheas + rolls ocasionales en tresillos de fusa */
-      var roll = (e.vari.roll[bar % 4] || fill) && s >= 12;
-      if (roll) {
-        var k = fill ? 3 : 2;
-        for (var i = 0; i < k; i++) I.hat(g, t + i * sd / k, 0.05 + 0.03 * (s - 12) + 0.01 * i, 0.025, { pan: 0.25 });
-      } else if (s % 2 === 0) I.hat(g, jit(t, 3), hum(s % 4 === 0 ? 0.13 : 0.09), 0.03);
-      else if (R() < 0.1) I.hat(g, t, 0.05, 0.02);
-      if (s === 14 && !roll && R() < 0.2) I.hat(g, t, 0.07, 0.18, { freq: 6500 });
-      if (fill && s >= 12) I.snare(g, t, 0.12 + 0.05 * (s - 12), { freq: 1700, tone: 190, dec: 0.08 });
-      /* destello frío en la sección B */
-      if (bar % 16 >= 8 && e.vari.mel && (s === 0 || s === 6 || s === 10) && R() < 0.55) {
-        I.pluck(g, jit(t, 3), P.mel[(bar * 3 + s) % P.mel.length], hum(0.12), { bright: 0.9, decay: 0.997, send: 0.55, pan: 0.3, lp: 3200, len: 1.6 });
-      }
-    }
-  };
-
-  /* La Logia — templo del perreo: reggaetón lento, coro/órgano con formantes, campana ritual, Mi frigio */
-  PRESETS["la-logia"] = {
-    bpm: 88, swing: 0.05, lp: 6200, delay: 0.75, fb: 0.46, wet: 0.5, delayLp: 1800, breath: 31,
-    prog: ["Em", "F", "Em", "Em", "Am", "F", "Em", "F", "Em", "F", "G", "F", "Dm", "F", "Em", "Em"],
-    ch: {
-      Em: { b: 40, n: [52, 59, 64, 67] }, F: { b: 41, n: [53, 60, 65, 69] }, G: { b: 43, n: [55, 62, 67, 71] },
-      Am: { b: 45, n: [57, 64, 69, 72] }, Dm: { b: 38, n: [50, 57, 62, 65] }
-    },
-    motif: [64, 65, 67, 65, 64],
-    bar: function (e, bar, t, bd) {
-      var sec = bar % 16;
-      if (sec % 8 === 0) I.bell(e.g, t + 0.02, sec === 0 ? 76 : 71, 0.2, { dec: 5.5, lp: 2400, send: 0.7 });
-      if (samePrev(this, bar)) return;
-      var ch = chordAt(this, bar), n = runLen(this, bar);
-      /* formantes "ah" en A, "oh" en B, con deriva lenta */
-      var F = sec < 8 ? [[760, 6, 1, 700], [1150, 7, 0.55], [2600, 9, 0.15]] : [[460, 6, 1, 520], [820, 7, 0.6], [2500, 9, 0.12]];
-      I.pad(e.g, t, ch.n, bd * n - 0.05, 0.2, { type: "sawtooth", formants: F, det: 6, atk: 1.1, rel: 1.4, send: 0.45, pan: 0.05 });
-    },
-    step: function (e, bar, s, t, sd) {
-      var g = e.g, P = this, ch = chordAt(P, bar), nx = chordAt(P, bar + 1), fill = bar % 8 === 7, drop = e.isDrop(bar);
-      if (!drop) {
-        if (s === 0) I.kick(g, t, hum(0.72, 0.05), { f0: 105, f1: 42, dec: 0.36 });
-        else if (s === 8) I.kick(g, t, hum(0.58, 0.05), { f0: 105, f1: 42, dec: 0.3 });
-        else if (s === 4 || s === 12) I.kick(g, t, hum(0.28), { f0: 90, f1: 42, dec: 0.18 });
-      }
-      if ((s === 3 || s === 6 || s === 11 || s === 14) && !(fill && s >= 12))
-        I.snare(g, jit(t, 3), hum(s === 6 || s === 14 ? 0.24 : 0.18), { freq: 1100, tone: 165, dec: 0.1, send: 0.2 });
-      if (s % 4 === 2) I.hat(g, jit(t, 4), hum(0.06), 0.03, { freq: 6400 });
-      var bo = { type: "sine", cut: 400, sus: 0.8 };
-      if (s === 0) I.bass(g, t, ch.b - 12, sd * 6, hum(0.5, 0.04), bo);
-      else if (s === 8) {
-        if (nx.b !== ch.b) bo.glide = { to: nx.b - 12, at: sd * 5, time: sd * 2.5 };
-        I.bass(g, t, ch.b - 12, sd * 7.5, hum(0.44, 0.04), bo);
-      }
-      /* fill: barrido + tres golpes */
-      if (fill && s === 8) I.swell(g, t, sd * 8, 0.1, { from: 300, to: 2800 });
-      if (fill && s >= 12 && s <= 14) I.snare(g, t, 0.14 + 0.06 * (s - 12), { freq: 1200, tone: 170, send: 0.3 });
-      /* motivo ritual en B */
-      if (bar % 16 >= 8 && e.vari.mel && bar % 2 === 1 && (s === 0 || s === 3 || s === 6 || s === 10 || s === 13)) {
-        var i = [0, 3, 6, 10, 13].indexOf(s);
-        I.pluck(g, jit(t, 6), P.motif[i], hum(0.14), { bright: 0.45, decay: 0.997, send: 0.5, pan: -0.3, lp: 2200, len: 1.6 });
       }
     }
   };

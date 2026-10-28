@@ -29,8 +29,6 @@ Instagram no envía webhooks cuando se publica un post en el feed, así que la A
 | Club | Variable |
 |---|---|
 | Tutaina | `IG_TOKEN_TUTAINA` |
-| Medallo Club | `IG_TOKEN_MEDALLO` |
-| La Logia | `IG_TOKEN_LA_LOGIA` |
 | Cantina 70 | `IG_TOKEN_CANTINA_70` |
 
 5. (Recomendado) Conecta Vercel KV / Upstash y define `CRON_SECRET`. El cron de `vercel.json` llama a `/api/ig-refresh` cada lunes y renueva los tokens antes de que venzan. Sin KV, el refresh igual extiende la vigencia del token actual.

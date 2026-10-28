@@ -1,48 +1,32 @@
-# Tutaina Eje Cafetero — DESIGN.md
+# Tutaina Eje Cafetero, DESIGN.md (v3, ronda "que no se note IA")
 
-Modo: Persuade (la visita decide y reserva). Mundo: la noche de un club grande; la fotografía y los flyers oficiales llevan el color, la interfaz se retira.
+Modo: Persuade. La foto de la noche y los flyers oficiales llevan todo el color; la interfaz es negra, plana y se retira.
 
-## Color (tokens en `:root`)
-| Token | Hex | Uso |
-|---|---|---|
-| `--bg` | #050506 | Suelo principal (70–90 % de la página) |
-| `--surface` | #0b0b0d | Campo alterno por sección (un paso de tono, borde duro, sin degradado) |
-| `--plate` | #141416 | Respaldo de imagen sin foto (+ grano finísimo) |
-| `--ink` | #f2f0ea | Texto y titulares (blanco roto, nunca #fff) |
-| `--muted` | #a29d93 | Texto secundario, gris cálido (≥ 4.5:1 sobre `--bg`) |
-| `--faint` | #6d6962 | Solo texto de placeholder en placas, nunca texto de lectura |
-| `--accent` | #fee003 | Único acento |
-| `--accent-ink` | #050506 | Texto sobre amarillo |
+## Estructura (5 secciones + footer)
+1. **Portada**: foto real a sangre con un único scrim neutro, wordmark TUTAINA (h1), "Discoteca en Pereira, Eje Cafetero", próxima noche (dinámica), horario corto, Reservar mesa + enlace Ver eventos. Sin foto: fondo negro plano.
+2. **Eventos** (`#eventos`): flyer de la próxima noche grande (4:5, sin rotación ni marco) + título, fechas, caption real, Puertas/Dónde/Mesas, botones. Debajo "Noches pasadas": muro de flyers (5/4/2 col), filtro por año, "Ver N más". Flyers enlazan a `permalink` si existe, si no a Instagram. El origen de la agenda (Instagram o respaldo) va solo en `data-src` de la sección.
+3. **Fotos** (`#galeria`): mosaico de 8 .webp oficiales; el texto (h2 + 1 párrafo) ocupa una celda del mosaico. Figcaptions ocultos visualmente (quedan para lectores de pantalla).
+4. **Reservas**: cómo reservar por WhatsApp, número, botón; a la derecha un bloque plano con el código de vestimenta real.
+5. **Ubicación y horario**: dirección, barrios cercanos, Google Maps, tabla de horario, redes.
+Footer: lockup, WhatsApp, sitio oficial, todas las discotecas, ©.
 
-### Reglas del amarillo (< 5 % de cualquier pantalla)
-Solo en: (1) el botón principal "Reservar mesa", (2) la fecha del próximo evento, (3) el subrayado de enlace activo/hover, (4) el estado activo (filtro de año, foco). Nunca en titulares, iconos, bordes de tarjeta ni fondos de sección. Sin glow, sin sombras de color, sin degradados en texto.
+## Color
+`--bg #050506`, `--surface #0c0c0e` (secciones alternas), `--plate #131315` (respaldo de imagen y bloque de vestimenta), `--ink #f2f0ea`, `--muted #a29d93`, `--faint #6d6962`, `--accent #fee003`.
+Amarillo solo en: wordmark, botón principal, fechas de evento, año activo, foco. Sin degradados, glows ni sombras (salvo el scrim de la foto y la línea de la barra fija).
 
-## Tipografía
-- Display: **Archivo** variable. Marca/firma (hero, footer): `wdth 125`, `wght 800`, mayúsculas, tracking −0.02em. Titulares h2: `wdth 75` (condensada), `wght 700`, mayúsculas, line-height .92, máx. 6rem. h3: Archivo `wdth 100`, `wght 600`, caja normal.
-- Texto: **Hanken Grotesk** 400/500/600, 17px/1.6, medida ≤ 66ch.
-- Datos: **IBM Plex Mono** 400/500 solo para fechas y horas (dato, no etiqueta), `font-variant-numeric: tabular-nums`.
-- Escala (5 tamaños lejanos): 14 · 17 · 24 · clamp(44→96) · clamp(64→200 firma).
-- Sin etiquetas en mayúsculas espaciadas, sin eyebrows, sin numeración 01/02.
+## Tipografía (2 familias)
+- **Archivo**: wordmark (900, wdth 118, mayúsculas, solo la marca), títulos de sección 650 wdth 88 en caja normal (30→48px), título de evento 750 wdth 80 (44→84px).
+- **Hanken Grotesk**: todo lo demás, 17px/1.6. Números con `tabular-nums`; sin monoespaciada.
+- Nada de mayúsculas gigantes en secciones, eyebrows, numeración 01/02 ni etiquetas espaciadas.
 
-## Retícula
-12 columnas, máx. 1320px, gutter `max(16px, env(safe-area-inset-*))` / 4vw en escritorio, gap 24px. Dos o tres bordes izquierdos reutilizados: col 1 (titulares), col 6/7 (texto). Secciones: 120–160px de aire vertical; el cambio de campo de color separa, no las líneas. Líneas de 1px solo dentro de datos tabulares (horario, barra de info del hero, lista de razones).
-
-## Forma
-Radio 0 en todo (imágenes, botones, placas). Sin sombras en reposo. Proporción de flyer 4:5.
-
-## Imagen
-Flyers y fotos oficiales sin lavar con color. Texto sobre foto solo con scrim neutro negro (30–60 %). Respaldo sin foto: placa `--plate` con grano, título en Archivo abajo-izquierda y fecha en mono.
-
-## Hero (v2)
-Asimétrico: firma + h1 + CTA en cols 1–6; a la derecha, composición de 4 flyers oficiales (próximo evento al frente, 3 recientes detrás) con rotación −8°…+5°, escala y brillo según profundidad (1 / .7 / .45 / .3), sombras con desplazamiento (nunca halo). Luz: foco cálido radial (rgba(255,228,176,.13)) y un haz suave desde arriba, ambos respiran. Banda de datos + ticker mono de próximas fechas (eventos + jue–sáb siguientes, pausa al hover). Fotos de fondo al 55 % de opacidad.
+## Respaldo sin foto
+`.plate`: tono plano `--plate` con la corona al 7 % centrada. Sin texto encima. La foto real (onerror la retira si falla) lo tapa por completo.
 
 ## Motion
-- Un solo momento orquestado: entrada del hero — foto asienta (1.06→1), firma con clip-path (.1s), texto y CTA suben (.4–.6s), flyers se reparten en stagger (.3/.45/.6/.75s, 900ms), banda de datos (.9s). Curva `cubic-bezier(0.23,1,0.32,1)`.
-- Parallax de la composición: ratón (solo puntero fino) ±22px × profundidad y scroll −0.12 × profundidad, rAF con amortiguación; desactivado con reduced-motion.
-- Luz contenida: grano que respira (opacidad, 6s) y un haz fino vertical casi imperceptible. Nada figurativo.
-- Microinteracciones 200–300ms: zoom de imagen 1.03 y subrayado que crece, solo con `(hover:hover) and (pointer:fine)`.
-- Nav: transparente sobre el hero, sólida (`--bg`) al hacer scroll, transición 250ms.
-- `prefers-reduced-motion`: se quitan transformaciones y bucles; quedan cambios de opacidad.
+Solo: entrada suave del bloque de portada (14px, .9s), zoom 1.025 en hover de flyers (puntero fino), subrayado que aparece en enlaces, nav transparente → sólida. Sin parallax, ticker, partículas ni bucles. `prefers-reduced-motion` lo apaga todo.
 
-## Superficies del navegador
-`::selection` amarillo/negro, `caret-color` amarillo, `scrollbar-color` gris cálido, foco 2px amarillo con offset 3px.
+## Voz
+Corta y concreta, como el community manager: datos (horario, dirección, cómo reservar, qué no se permite) en vez de adjetivos. Prohibido: "experiencia", "alto nivel", "seguro y controlado", "atención personalizada", "la mejor rumba", cifras sueltas tipo "10+ años" en fila.
+
+## Conservado
+Wordmark con corona sobre la A + "EJE CAFETERO" en el nav, FALLBACK_ARRAY + `IGEvents`, JSON-LD (NightClub, Event estático y `#ld-events` dinámico), h1 único, alts, píldora de música (`shared/music.js` + `ambient.js`), menú móvil con foco atrapado y Escape, safe areas, objetivos ≥44px.
