@@ -1,32 +1,42 @@
-# Tutaina Eje Cafetero, DESIGN.md (v3, ronda "que no se note IA")
+# Tutaina Eje Cafetero, DESIGN.md (v5, "partir del sitio oficial")
 
-Modo: Persuade. La foto de la noche y los flyers oficiales llevan todo el color; la interfaz es negra, plana y se retira.
+Base: discotecatutaina.com (Bricks, `<style id="wpr-usedcss">`). La idea es que se reconozca como la marca real y quede más ordenado: sin efectos, con tamaños legibles y responsive de 320 a 2560 px.
 
-## Estructura (5 secciones + footer)
-1. **Portada**: foto real a sangre con un único scrim neutro, wordmark TUTAINA (h1), "Discoteca en Pereira, Eje Cafetero", próxima noche (dinámica), horario corto, Reservar mesa + enlace Ver eventos. Sin foto: fondo negro plano.
-2. **Eventos** (`#eventos`): flyer de la próxima noche grande (4:5, sin rotación ni marco) + título, fechas, caption real, Puertas/Dónde/Mesas, botones. Debajo "Noches pasadas": muro de flyers (5/4/2 col), filtro por año, "Ver N más". Flyers enlazan a `permalink` si existe, si no a Instagram. El origen de la agenda (Instagram o respaldo) va solo en `data-src` de la sección.
-3. **Fotos** (`#galeria`): mosaico de 8 .webp oficiales; el texto (h2 + 1 párrafo) ocupa una celda del mosaico. Figcaptions ocultos visualmente (quedan para lectores de pantalla).
-4. **Reservas**: cómo reservar por WhatsApp, número, botón; a la derecha un bloque plano con el código de vestimenta real.
-5. **Ubicación y horario**: dirección, barrios cercanos, Google Maps, tabla de horario, redes.
-Footer: lockup, WhatsApp, sitio oficial, todas las discotecas, ©.
+## Tokens (literales del CSS oficial)
+- Color: --tt-ink #060607 · --tt-ink-soft #0a0a0d · --tt-ink-card #101014 · fondo de hero/contacto #050506 · bandas #08080a
+- Dorado: --tt-gold #ffd400 · --tt-gold-2 #f2b600 · --tt-gold-3 #ffe985 (hover) · texto sobre dorado #080808
+- --tt-cream #f5f0e3 · --tt-muted #a3a096 · --tt-line rgba(255,255,255,.09) · --tt-gold-line rgba(255,212,0,.28)
+- Easing: --tt-ease cubic-bezier(.22,.61,.36,1) · --tt-ease-out cubic-bezier(.16,1,.3,1)
+- --tt-pad clamp(18.4px,4.4vw,72px), mínimo 16px · contenedor 1280px (el oficial usa 1320) · secciones clamp(64px,8vw,112px)
+- Radios: tarjetas 6px · chips/insignias 3px · botones 999px
 
-## Color
-`--bg #050506`, `--surface #0c0c0e` (secciones alternas), `--plate #131315` (respaldo de imagen y bloque de vestimenta), `--ink #f2f0ea`, `--muted #a29d93`, `--faint #6d6962`, `--accent #fee003`.
-Amarillo solo en: wordmark, botón principal, fechas de evento, año activo, foco. Sin degradados, glows ni sombras (salvo el scrim de la foto y la línea de la barra fija).
+## Fuentes (Google Fonts, con los pesos del CSS oficial)
+- Archivo 500–900 (--font-display): títulos en mayúsculas 900, wordmark y números.
+- Manrope 300–800 (--font-body): texto y botones (800, .16em, en mayúsculas).
+- Instrument Serif italic (--font-serif): el `<em>` dorado de los h2, los índices 01–07 y el "#1".
 
-## Tipografía (2 familias)
-- **Archivo**: wordmark (900, wdth 118, mayúsculas, solo la marca), títulos de sección 650 wdth 88 en caja normal (30→48px), título de evento 750 wdth 80 (44→84px).
-- **Hanken Grotesk**: todo lo demás, 17px/1.6. Números con `tabular-nums`; sin monoespaciada.
-- Nada de mayúsculas gigantes en secciones, eyebrows, numeración 01/02 ni etiquetas espaciadas.
+## Escala (corregida por el brief; el oficial usa etiquetas de 8–10px)
+h1 clamp(44px,6vw,88px) · h2 clamp(30px,3.6vw,48px) · texto 15–18px/1.7 · etiquetas ≥11–12px · táctil ≥44px.
 
-## Respaldo sin foto
-`.plate`: tono plano `--plate` con la corona al 7 % centrada. Sin texto encima. La foto real (onerror la retira si falla) lo tapa por completo.
+## Estructura (mismo orden que el sitio oficial)
+Header .tt-header (corona + TUTAINA + EJE CAFETERO; nav Inicio/Eventos/El club/Galería/Contacto; "Reservar" en contorno sobre el hero y dorado al hacer scroll; menú móvil a pantalla completa ≤960px)
+→ Hero (eyebrow, TUTAINA en dorado + PEREIRA en contorno, "La Discoteca #1 del Eje Cafetero", Reservar ahora / Ver agenda, horario y dirección; foto .webp a la derecha con el scrim oficial y marco dorado)
+→ 01 "Calendario y tickets" (.event: flyer 4:5 contain, insignia de fecha, kicker, título, Reservar por WhatsApp; con 1 sola noche se muestra flyer + datos lado a lado)
+→ 02 "Lo mejor de nuestras noches" (fila con scroll-snap manual, flechas, progreso y contador; 30 noches + tarjeta a Instagram)
+→ 03 "¡La fiesta del Eje Cafetero!" (dos fotos, insignia 10+, chips, cifras fijas)
+→ 04 "¿Dónde está Tutaina Pereira?" (texto, 8 sectores, mapa ilustrado estático + Abrir mapa)
+→ 05 "¿Por qué Tutaina es la mejor discoteca en Pereira?" (4 razones + código de vestimenta)
+→ 06 "Los mejores eventos en Tutaina" (8 fotos .webp, 4/3/2 columnas)
+→ 07 "Reserva tu noche" (4 datos de contacto, WhatsApp/Llamar, horario)
+→ Footer .tt-footer. Botón flotante de WhatsApp sin pulso, que se oculta en Contacto.
+
+.section__head: grid auto / minmax(0,1fr) / minmax(0,320px). Desde 1100px la descripción baja a la columna 2; desde 520px va en una sola columna.
+
+## Lo que se quitó del sitio oficial
+Preloader, canvas de polvo, haces, grano, cursor-glow, barra de progreso, rail lateral, ticker, zoom del hero, brillo animado en el dorado, botones magnéticos, parallax, contadores, radar/ping del mapa, marquee del footer, lightbox y la animación de pulso. Las .jpg de 2024/10 tampoco están (se bloquean fuera de su dominio).
 
 ## Motion
-Solo: entrada suave del bloque de portada (14px, .9s), zoom 1.025 en hover de flyers (puntero fino), subrayado que aparece en enlaces, nav transparente → sólida. Sin parallax, ticker, partículas ni bucles. `prefers-reduced-motion` lo apaga todo.
+Solo hay tres cosas: aparición al hacer scroll (opacity + 12px, 400ms, una vez), hovers de 300ms (color, borde, flecha 3px) y la transición del header. Con reduced motion no hay ninguna.
 
-## Voz
-Corta y concreta, como el community manager: datos (horario, dirección, cómo reservar, qué no se permite) en vez de adjetivos. Prohibido: "experiencia", "alto nivel", "seguro y controlado", "atención personalizada", "la mejor rumba", cifras sueltas tipo "10+ años" en fila.
-
-## Conservado
-Wordmark con corona sobre la A + "EJE CAFETERO" en el nav, FALLBACK_ARRAY + `IGEvents`, JSON-LD (NightClub, Event estático y `#ld-events` dinámico), h1 único, alts, menú móvil con foco atrapado y Escape, safe areas, objetivos ≥44px.
+## Datos
+FALLBACK_ARRAY + ../shared/ig-events.js + IGEvents.load({club:"tutaina"}) con permalinks. JSON-LD NightClub, y Event (#ld-events se reemplaza con los próximos eventos cargados).
