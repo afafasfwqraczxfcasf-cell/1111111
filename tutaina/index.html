@@ -174,8 +174,6 @@ footer .lockup .logo-img{height:44px}
 .years button{min-height:44px;min-width:64px;padding:0 16px;border-radius:var(--r);border:1px solid var(--line);background:transparent;color:var(--ink);font:600 12px/1 var(--f);letter-spacing:.12em;text-transform:uppercase;cursor:pointer;transition:border-color .2s,color .2s}
 .years button:hover{border-color:var(--y);color:var(--y)}
 .years button[aria-pressed="true"]{background:var(--y);border-color:var(--y);color:var(--bg)}
-.more{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px;margin-top:clamp(28px,3vw,40px)}
-.more .count{margin:0;color:var(--muted);font-size:14px}
 
 /* ===== Mesas: la foto ocupa una columna de la rejilla, el texto el resto ===== */
 .mesas{align-items:start}
@@ -255,6 +253,72 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
   .night{border-top:0;padding-top:0;margin-top:28px}
   .brand h1 .lockup .logo-img{width:clamp(180px,56vw,260px)}
 }
+
+/* Footer: 4 columnas (marca, visítanos, contacto, legal) + barra de copyright y avisos legales */
+.site-foot{border-top:1px solid var(--line);padding:clamp(48px,6vw,72px) 0 calc(28px + env(safe-area-inset-bottom,0px))}
+.fgrid{display:grid;grid-template-columns:minmax(236px,1.35fr) repeat(3,minmax(210px,1fr));gap:40px clamp(20px,2.4vw,48px);align-items:start}
+.fcol{min-width:0;display:grid;align-content:start;gap:6px}
+.fcol p,.fcol address,.fcol li,.fcol a{margin:0;font:400 14px/1.6 var(--f);font-style:normal}
+.fcol p,.fcol address{color:var(--muted)}
+.fcol .fl{display:block;padding:2.8px 0}
+.fcol address{display:grid;gap:6px;color:var(--ink)}
+.fcol .nw{white-space:nowrap}
+.fh{display:block;padding:2.8px 0;font:600 12px/22.4px var(--f)!important;letter-spacing:.16em;text-transform:uppercase;color:var(--y)!important;margin:0 0 4px!important}
+.fcol ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fcol ul li{display:flex}
+.site-foot .fcol ul a{display:inline-flex;align-items:center;min-height:28px;color:var(--ink);font-weight:400;text-decoration:none;transition:color .2s}
+.site-foot .fcol ul a:hover,.site-foot .fcol ul a:focus-visible{color:var(--y)}
+.fbrand > a{display:flex;align-items:flex-start;min-height:28px;margin:0 0 4px;line-height:0}
+.fbrand img{display:block;height:auto;width:min(180px,100%);margin:0}
+.fbar{margin-top:clamp(36px,5vw,56px);padding-top:20px;border-top:1px solid var(--line);display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;gap:8px 32px;align-items:center}
+.fbar{padding-right:64px}
+.fbar p{margin:0;font:400 12.5px/1.55 var(--f);color:var(--muted)}
+@media (max-width:960px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))} .fbar{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== Eventos pasados: slider horizontal (scroll-snap, flechas, arrastre, teclado) ===== */
+.sl-end{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.sl-nav{display:flex;gap:8px}
+.sl-nav[hidden]{display:none}
+.sl-btn{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;padding:0;border-radius:var(--r);border:1px solid var(--line);background:transparent;color:var(--ink);cursor:pointer;transition:border-color .2s,color .2s,opacity .2s}
+.sl-btn svg{width:20px;height:20px}
+.sl-btn:hover:not(:disabled){border-color:var(--y);color:var(--y)}
+.sl-btn:disabled{opacity:.3;cursor:default}
+.rail{position:relative;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:4px 0}
+.rail::-webkit-scrollbar{display:none}
+.rail:focus-visible{outline-offset:2px}
+.rail-track{display:flex;gap:var(--gap);margin:0;padding:0;list-style:none}
+.rail-track > li{flex:0 0 calc((100% - 3*var(--gap))/4);min-width:0;scroll-snap-align:start}
+.rail-track a:focus-visible{outline-offset:-2px}
+.rail img{-webkit-user-drag:none;user-select:none}
+.rail.drag{scroll-snap-type:none;cursor:grabbing;user-select:none}
+@media (min-width:700px) and (max-width:1023px){ .rail-track > li{flex-basis:calc((100% - 2*var(--gap))/3)} }
+@media (max-width:699px){ .rail-track > li{flex-basis:calc((100% - var(--gap))/1.3)} }
+
+/* ===== Fondo con vida: manchas de color de marca que se desplazan + grano finísimo ===== */
+body::before,body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+body::before{inset:-15%;background:
+  radial-gradient(42% 38% at 18% 22%,rgba(255,212,0,.10),transparent 70%),
+  radial-gradient(38% 44% at 84% 58%,rgba(255,212,0,.08),transparent 70%),
+  radial-gradient(34% 30% at 46% 96%,rgba(255,212,0,.06),transparent 70%);
+  animation:bgDrift 52s ease-in-out infinite alternate;will-change:transform,opacity}
+body::after{opacity:.05;mix-blend-mode:screen;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") repeat;background-size:200px 200px}
+@keyframes bgDrift{
+  0%{transform:translate3d(-4%,-3%,0) rotate(0deg) scale(1);opacity:.85}
+  50%{transform:translate3d(3%,2%,0) rotate(6deg) scale(1.08);opacity:1}
+  100%{transform:translate3d(5%,-2%,0) rotate(-4deg) scale(1.14);opacity:.9}
+}
+
+/* ===== Volver arriba: botón flotante ===== */
+.totop{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:48;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;padding:0;border:0;border-radius:50%;background:var(--y);color:#000;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s}
+.totop svg{width:22px;height:22px}
+.totop.show{opacity:1;visibility:visible;transform:none;transition:opacity .25s ease,transform .25s ease,visibility 0s}
+.totop:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+.drawer.open ~ .totop{visibility:hidden}
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+  .totop,.totop.show{transform:none}
+}
 </style>
 </head>
 <body>
@@ -265,7 +329,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
     <a class="lockup" href="#top" aria-label="Tutaina Eje Cafetero, inicio"><img class="logo-img" src="img/logo-tutaina.webp" alt="" width="566" height="188" decoding="async"></a>
     <nav class="nav" aria-label="Principal">
       <a class="nl" href="#agenda">Agenda</a>
-      <a class="nl" href="#pasadas">Noches pasadas</a>
+      <a class="nl" href="#eventos-pasados">Eventos pasados</a>
       <a class="nl" href="#fotos">Fotos</a>
       <a class="nl" href="#mesas">Mesas</a>
       <a class="nl" href="#llegar">Cómo llegar</a>
@@ -278,15 +342,16 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
 </header>
 <nav class="drawer" id="drawer" aria-label="Menú">
   <a href="#agenda">Agenda</a>
-  <a href="#pasadas">Noches pasadas</a>
+  <a href="#eventos-pasados">Eventos pasados</a>
   <a href="#fotos">Así es Tutaina</a>
   <a href="#mesas">Mesas y reservas</a>
   <a href="#llegar">Cómo llegar</a>
   <a class="btn" href="https://wa.me/573011265132?text=Hola%20Tutaina%2C%20quiero%20reservar%20una%20mesa." target="_blank" rel="noopener">Reservar por WhatsApp</a>
 </nav>
 
+<button class="totop" type="button" id="toTop" aria-label="Volver arriba" tabindex="-1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></button>
 <main id="top">
-  <!-- Portada: la próxima noche (IGEvents / FALLBACK_ARRAY). El HTML inicial es El linaje para que funcione sin JS. -->
+  <!-- Portada: el próximo evento (IGEvents / FALLBACK_ARRAY). El HTML inicial es El linaje para que funcione sin JS. -->
   <section class="hero" aria-labelledby="h1">
     <div class="wrap hero-grid">
       <div class="brand">
@@ -296,7 +361,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
       </div>
       <figure class="fly" id="heroFly"><span class="plate" aria-hidden="true"><span>Tutaina</span><b id="heroPlate">El linaje</b></span><img id="heroImg" src="https://discotecatutaina.com/wp-content/uploads/2026/10/845543157_18645709429044927_1256940028921947836_n.webp" alt="Flyer de El linaje, Halloween de vampiros en Tutaina Pereira, 30 y 31 de octubre y 1 de noviembre" width="1080" height="1350" fetchpriority="high" decoding="async" referrerpolicy="no-referrer" onerror="this.hidden=true"></figure>
       <div class="night" id="heroNight">
-        <p class="lbl" id="heroTag">Próximo Evento</p>
+        <p class="lbl" id="heroTag">Próximo evento</p>
         <h2 class="nname" id="heroName">El linaje</h2>
         <p class="nsub" id="heroSub">Halloween de vampiros</p>
         <p class="dates" id="heroDates"><span>Vie <b>30</b> Oct</span><span>Sáb <b>31</b> Oct</span><span>Dom <b>01</b> Nov</span></p>
@@ -314,7 +379,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
       <div class="head">
         <div><p class="lbl">Jueves a sábado · 9:30 PM</p><h2 id="agenda-title">Agenda</h2></div>
       </div>
-      <ul class="grid cards" id="week" aria-label="Próximas noches">
+      <ul class="grid cards" id="week" aria-label="Próximos eventos">
         <li class="card upc">
           <figure class="fly"><span class="plate" aria-hidden="true"><span>Tutaina</span><b>El linaje</b></span><img src="https://discotecatutaina.com/wp-content/uploads/2026/10/845543157_18645709429044927_1256940028921947836_n.webp" alt="Flyer de El linaje, Halloween de vampiros en Tutaina Pereira" width="1080" height="1350" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.hidden=true"></figure>
           <div class="body">
@@ -356,18 +421,16 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
     </div>
   </section>
 
-  <section class="sec" id="pasadas" aria-labelledby="pasadas-title">
+  <section class="sec" id="eventos-pasados" aria-labelledby="eventos-pasados-title">
     <div class="wrap">
       <div class="head">
-        <div><p class="lbl">Archivo</p><h2 id="pasadas-title">Noches pasadas</h2></div>
-        <a class="tlink" href="https://www.instagram.com/tutaina.ejecafetero/" target="_blank" rel="noopener">@tutaina.ejecafetero</a>
+        <div><p class="lbl">Archivo</p><h2 id="eventos-pasados-title">Eventos pasados</h2></div>
+        <div class="sl-end"><a class="tlink" href="https://www.instagram.com/tutaina.ejecafetero/" target="_blank" rel="noopener">@tutaina.ejecafetero</a><div class="sl-nav" aria-label="Controles del carrusel" role="group"><button class="sl-btn" type="button" id="slPrev" aria-controls="archRail" aria-label="Eventos anteriores" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="sl-btn" type="button" id="slNext" aria-controls="archRail" aria-label="Eventos siguientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div></div>
       </div>
       <div class="years" id="years" role="group" aria-label="Filtrar por año" hidden></div>
       <!-- Se llena con IGEvents o FALLBACK_ARRAY; data-source indica cuál -->
-      <ul class="grid cards arch" id="arch" data-source="fallback" aria-live="polite"></ul>
-      <div class="more">
-        <button class="btn ghost" type="button" id="moreBtn" hidden>Ver más noches</button>
-        <p class="count" id="archCount"></p>
+      <div class="rail" id="archRail" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Eventos pasados">
+        <ul class="rail-track arch" id="arch" data-source="fallback" aria-live="polite"></ul>
       </div>
     </div>
   </section>
@@ -397,7 +460,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
       <div class="mesas-copy">
         <div class="head"><div><p class="lbl">Reservas</p><h2 id="mesas-title">Mesas y reservas</h2></div></div>
         <p>Mesas y zonas VIP se reservan por WhatsApp. Mándanos <strong>la fecha, cuántos vienen y a nombre de quién queda la mesa</strong>, y te confirmamos.</p>
-        <p>Para noches con artista en vivo, mejor con tiempo.</p>
+        <p>Para eventos con artista en vivo, mejor con tiempo.</p>
         <div class="door">
           <h3>Código de vestimenta</h3>
           <p>No permitimos el ingreso con:</p>
@@ -450,15 +513,38 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
   </section>
 </main>
 
-<footer>
-  <div class="wrap foot">
-    <a class="lockup" href="#top" aria-label="Tutaina Eje Cafetero, volver arriba"><img class="logo-img" src="img/logo-tutaina.webp" alt="" width="566" height="188" decoding="async" loading="lazy"></a>
-    <p>Av. Circunvalar # 13-01 Este 10, Pereira · Jue a sáb, 9:30 PM–4:00 AM · WhatsApp +57 301 126 5132</p>
-    <nav aria-label="Pie">
-      <a href="https://www.instagram.com/tutaina.ejecafetero/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://wa.me/573011265132" target="_blank" rel="noopener">WhatsApp</a>
-    </nav>
-    <p class="legal">Consumo responsable. Prohibida la venta de alcohol a menores de edad. Tutaina Eje Cafetero © <span id="yr">2026</span></p>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fcol fbrand">
+        <a class="lockup" href="#top" aria-label="Tutaina Eje Cafetero, volver arriba"><img class="logo-img" src="img/logo-tutaina.webp" alt="" width="566" height="188" decoding="async" loading="lazy"></a>
+        <p class="fl">Discoteca en Pereira, Eje Cafetero.</p>
+      </div>
+      <div class="fcol">
+        <p class="fh">Visítanos</p>
+        <address><span class="fl">Av. Circunvalar # 13-01 Este 10</span><span class="fl">Pereira, Risaralda</span></address>
+        <p class="fl">Jue a sáb · <span class="nw">9:30 p.m. – 4 a.m.</span></p>
+      </div>
+      <div class="fcol">
+        <p class="fh">Contacto</p>
+        <ul>
+          <li><a href="https://wa.me/573011265132" target="_blank" rel="noopener">WhatsApp +57 301 126 5132</a></li>
+          <li><a href="https://www.instagram.com/tutaina.ejecafetero/" target="_blank" rel="noopener">Instagram @tutaina.ejecafetero</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <p class="fh">Legal</p>
+        <ul>
+          <li><a href="legal.html#privacidad">Política de privacidad</a></li>
+          <li><a href="legal.html#datos">Tratamiento de datos personales</a></li>
+          <li><a href="legal.html#terminos">Términos y condiciones</a></li>
+          <li><a href="legal.html#cookies">Política de cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbar">
+      <p>© <span id="yr">2026</span> Tutaina Eje Cafetero. Todos los derechos reservados.</p>
+    </div>
   </div>
 </footer>
 
@@ -553,7 +639,6 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
   ];
   /* Noche fija para la portada cuando no hay fechas especiales próximas */
   var STANDING = { id:"viernes-agro-fijo", title:"Viernes Agropecuario", standing:5, caption:"La noche más cafetera de la semana. Puertas a las 9:30 PM.", image:UP+"2026/10/viernes-agropecuario.webp", alt:"Flyer de Viernes Agropecuario en Tutaina Pereira" };
-  var PAGE = 12;
   var DAY = 864e5;
   var WD = ["Dom","Lun","Mar","Mié","Jue","Vie","Sáb"];
   var WDL = ["domingo","lunes","martes","miércoles","jueves","viernes","sábado"];
@@ -564,8 +649,8 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
   function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
   function safeUrl(u){ return (typeof u === "string" && (/^https:\/\//i.test(u) || /^img\/[\w.-]+$/.test(u))) ? u : null; }
   function absUrl(u){ return /^https:/.test(u) ? u : SITE_URL + u; }
-  function plainTitle(t){ return String(t || "Noche en Tutaina").split(" · ").join(", "); }
-  function shortTitle(t){ return String(t || "Noche en Tutaina").split(" · ")[0]; }
+  function plainTitle(t){ return String(t || "Evento en Tutaina").split(" · ").join(", "); }
+  function shortTitle(t){ return String(t || "Evento en Tutaina").split(" · ")[0]; }
   function subTitle(t){ var p = String(t || "").split(" · "); return p.length > 1 ? p.slice(1).join(", ") : ""; }
   function cap(s, n){ s = String(s || ""); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "…" : s; }
   function waFor(text){ return WA + encodeURIComponent("Hola Tutaina, quiero reservar mesa para " + text + "."); }
@@ -639,7 +724,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
     } catch(e){}
   }
 
-  /* ===== Portada: una sola noche, la próxima ===== */
+  /* ===== Portada: un solo evento, el próximo ===== */
   function renderHero(ev, tag){
     var img = safeUrl(ev.image), heroImg = $("heroImg");
     if (img && heroImg.getAttribute("src") !== img){ heroImg.hidden = false; heroImg.src = img; }
@@ -705,21 +790,108 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
     return used;
   }
 
-  /* ===== Noches pasadas: rejilla con filtro por año y "Ver más" ===== */
-  var archList = [], archYear = "all", archShown = PAGE;
+  /* ===== Eventos pasados: slider con filtro por año (todos los eventos del filtro, imágenes lazy) ===== */
+  var archList = [], archYear = "all";
+  /* ===== Slider de eventos pasados: flechas, teclado, arrastre con ratón (swipe nativo en táctil) ===== */
+  var Slider = (function(){
+    var rail = $("archRail"), prev = $("slPrev"), next = $("slNext"), nav = prev && prev.parentNode;
+    if (!rail || !prev || !next) return { reset:function(){}, update:function(){} };
+    var rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    function items(){ return rail.querySelectorAll(".rail-track > li"); }
+    function step(){
+      var li = items()[0]; if (!li) return rail.clientWidth;
+      var gap = parseFloat(getComputedStyle(li.parentNode).columnGap) || 0;
+      return li.getBoundingClientRect().width + gap;
+    }
+    function maxX(){ return Math.max(0, rail.scrollWidth - rail.clientWidth); }
+    function update(){
+      var x = rail.scrollLeft, m = maxX();
+      prev.disabled = x <= 2;
+      next.disabled = x >= m - 2;
+      if (nav) nav.hidden = m <= 2;
+    }
+    function go(left){ rail.scrollTo({ left:Math.max(0, Math.min(maxX(), left)), behavior: rm.matches ? "auto" : "smooth" }); }
+    function page(dir){
+      var s = step(), gap = parseFloat(getComputedStyle(rail.firstElementChild).columnGap) || 0;
+      var n = Math.max(1, Math.floor((rail.clientWidth + gap + 2) / s));
+      var idx = Math.round(rail.scrollLeft / s) + dir * n;
+      go(idx * s);
+    }
+    prev.addEventListener("click", function(){ page(-1); });
+    next.addEventListener("click", function(){ page(1); });
+    rail.addEventListener("scroll", update, { passive:true });
+    window.addEventListener("resize", update);
+    rail.addEventListener("keydown", function(e){
+      if (e.target !== rail) return;
+      var s = step();
+      if (e.key === "ArrowRight"){ e.preventDefault(); go((Math.round(rail.scrollLeft / s) + 1) * s); }
+      else if (e.key === "ArrowLeft"){ e.preventDefault(); go((Math.round(rail.scrollLeft / s) - 1) * s); }
+      else if (e.key === "Home"){ e.preventDefault(); go(0); }
+      else if (e.key === "End"){ e.preventDefault(); go(maxX()); }
+    });
+    /* Arrastre con ratón: solo tras moverse >6px; el clic posterior al arrastre no abre el enlace */
+    var down = false, dragging = false, sx = 0, sl = 0, pid = null, block = false;
+    rail.addEventListener("pointerdown", function(e){
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      down = true; dragging = false; sx = e.clientX; sl = rail.scrollLeft; pid = e.pointerId;
+    });
+    rail.addEventListener("pointermove", function(e){
+      if (!down || e.pointerId !== pid) return;
+      var dx = e.clientX - sx;
+      if (!dragging && Math.abs(dx) > 6){ dragging = true; rail.classList.add("drag"); try { rail.setPointerCapture(pid); } catch(_){} }
+      if (dragging){ e.preventDefault(); rail.scrollLeft = sl - dx; }
+    });
+    function end(e){
+      if (!down || (e && e.pointerId !== pid)) return;
+      down = false;
+      if (!dragging) return;
+      dragging = false; block = true; setTimeout(function(){ block = false; }, 0);
+      try { rail.releasePointerCapture(pid); } catch(_){}
+      var x = rail.scrollLeft, s = step();
+      rail.classList.remove("drag");
+      rail.scrollLeft = x;
+      go(Math.round(x / s) * s);
+    }
+    rail.addEventListener("pointerup", end);
+    rail.addEventListener("pointercancel", end);
+    rail.addEventListener("lostpointercapture", end);
+    rail.addEventListener("click", function(e){ if (block){ e.preventDefault(); e.stopPropagation(); block = false; } }, true);
+    rail.addEventListener("dragstart", function(e){ e.preventDefault(); });
+    function reset(){ rail.scrollLeft = 0; update(); }
+    update();
+    return { reset:reset, update:update };
+  })();
+
+  /* ===== Volver arriba (botón flotante) ===== */
+  (function(){
+    var b = $("toTop"); if (!b) return;
+    var rm = window.matchMedia("(prefers-reduced-motion: reduce)"), on = null;
+    function chk(){
+      var s = window.scrollY > 600;
+      if (s === on) return; on = s;
+      b.classList.toggle("show", s);
+      b.setAttribute("aria-hidden", s ? "false" : "true");
+      b.tabIndex = s ? 0 : -1;
+    }
+    window.addEventListener("scroll", chk, { passive:true }); chk();
+    b.addEventListener("click", function(){
+      window.scrollTo({ top:0, behavior: rm.matches ? "auto" : "smooth" });
+      var t = document.querySelector(".top a"); if (t) t.focus({ preventScroll:true });
+    });
+  })();
+
   function yearOf(ev){ var d = midnight(ev.date); return d ? String(d.getFullYear()) : ""; }
   function archFiltered(){ return archYear === "all" ? archList : archList.filter(function(ev){ return yearOf(ev) === archYear; }); }
   function drawArchive(){
-    var list = archFiltered(), shown = list.slice(0, archShown);
-    $("arch").innerHTML = shown.map(function(ev){
+    var list = archFiltered();
+    $("arch").innerHTML = list.map(function(ev){
       var link = safeUrl(ev.permalink) || IG, title = shortTitle(ev.title), lb = label(ev);
       return '<li class="card"><a href="' + esc(link) + '" target="_blank" rel="noopener" aria-label="' + esc(title + (lb ? ", " + lb : "")) + ', en Instagram">' +
         flyer(ev, "Flyer de " + plainTitle(ev.title) + " en Tutaina Pereira" + (lb ? ", " + lb : ""), true) +
         '<div class="body"><p class="when">' + esc(lb || "Sin fecha") + '</p><h3>' + esc(title) + '</h3></div></a></li>';
     }).join("");
-    $("moreBtn").hidden = shown.length >= list.length;
-    $("archCount").textContent = list.length ? shown.length + " de " + list.length + " noches" : "";
     Array.prototype.forEach.call($("years").querySelectorAll("button"), function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-y") === archYear ? "true" : "false"); });
+    Slider.reset();
   }
   function renderArchive(past, used, meta){
     archList = past.filter(function(ev){ return !used[ev.id || ev.image] && safeUrl(ev.image); });
@@ -727,19 +899,15 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
     var ys = Object.keys(years).sort().reverse();
     $("years").innerHTML = ys.length > 1 ? ['<button type="button" data-y="all">Todas</button>'].concat(ys.map(function(y){ return '<button type="button" data-y="' + y + '">' + y + '</button>'; })).join("") : "";
     $("years").hidden = ys.length < 2;
-    archYear = "all"; archShown = PAGE;
+    archYear = "all";
     drawArchive();
-    $("pasadas").hidden = !archList.length;
+    $("eventos-pasados").hidden = !archList.length; Slider.update();
     $("arch").setAttribute("data-source", meta.source === "instagram" ? "instagram" : "fallback");
     if (meta.updated) $("arch").setAttribute("data-updated", meta.updated);
   }
   $("years").addEventListener("click", function(e){
     var b = e.target.closest("button"); if (!b) return;
-    archYear = b.getAttribute("data-y"); archShown = PAGE; drawArchive();
-  });
-  $("moreBtn").addEventListener("click", function(){
-    var first = archShown; archShown += PAGE; drawArchive();
-    var a = $("arch").querySelectorAll("a")[first]; if (a) a.focus({ preventScroll:true });
+    archYear = b.getAttribute("data-y"); drawArchive();
   });
 
   function render(events, meta){
@@ -752,7 +920,7 @@ footer{border-top:1px solid var(--line);padding:48px 0 calc(40px + env(safe-area
     var upc = evs.filter(function(e){ return e._up; }).sort(function(a,b){ return (Date.parse(a.date)||0) - (Date.parse(b.date)||0); });
     var past = evs.filter(function(e){ return !e._up; }).sort(function(a,b){ if (!a.date) return 1; if (!b.date) return -1; return (parse(b.date)||0) - (parse(a.date)||0); });
     try {
-      if (upc.length) renderHero(upc[0], "Próxima noche");
+      if (upc.length) renderHero(upc[0], "Próximo evento");
       else renderHero(Object.assign({}, STANDING, { _night:nextOf(5) }), "Este viernes");
     } catch(e){}
     try { renderUpcoming(upc.slice(0, 4)); } catch(e){}

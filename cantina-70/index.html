@@ -280,6 +280,72 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
   .hero .fly{margin:32px auto 0;max-width:420px;width:100%}
   .night{border-top:0;padding-top:0;margin-top:28px}
 }
+
+/* Footer: 4 columnas (marca, visítanos, contacto, legal) + barra de copyright y avisos legales */
+.site-foot{border-top:1px solid var(--gold-lo);padding:clamp(48px,6vw,72px) 0 calc(28px + env(safe-area-inset-bottom,0px))}
+.fgrid{display:grid;grid-template-columns:minmax(236px,1.35fr) repeat(3,minmax(210px,1fr));gap:40px clamp(20px,2.4vw,48px);align-items:start}
+.fcol{min-width:0;display:grid;align-content:start;gap:6px}
+.fcol p,.fcol address,.fcol li,.fcol a{margin:0;font:400 14px/1.6 var(--text);font-style:normal}
+.fcol p,.fcol address{color:var(--muted)}
+.fcol .fl{display:block;padding:2.8px 0}
+.fcol address{display:grid;gap:6px;color:var(--ink)}
+.fcol .nw{white-space:nowrap}
+.fh{display:block;padding:2.8px 0;font:600 12px/22.4px var(--text)!important;letter-spacing:.16em;text-transform:uppercase;color:var(--gold)!important;margin:0 0 4px!important}
+.fcol ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.fcol ul li{display:flex}
+.site-foot .fcol ul a{display:inline-flex;align-items:center;min-height:28px;color:var(--ink);font-weight:400;text-decoration:none;transition:color .2s}
+.site-foot .fcol ul a:hover,.site-foot .fcol ul a:focus-visible{color:var(--gold)}
+.fbrand > a{display:flex;align-items:flex-start;min-height:28px;margin:0 0 4px;line-height:0}
+.fbrand img{display:block;height:auto;width:min(180px,100%);margin:0}
+.fbar{margin-top:clamp(36px,5vw,56px);padding-top:20px;border-top:1px solid var(--gold-lo);display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr) auto;gap:8px 32px;align-items:center}
+.fbar{padding-right:64px}
+.fbar p{margin:0;font:400 12.5px/1.55 var(--text);color:var(--muted)}
+@media (max-width:960px){.fgrid{grid-template-columns:repeat(2,minmax(0,1fr))} .fbar{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:560px){.fgrid{grid-template-columns:minmax(0,1fr)}}
+
+/* ===== Eventos pasados: slider horizontal (scroll-snap, flechas, arrastre, teclado) ===== */
+.sl-end{display:flex;flex-wrap:wrap;align-items:center;gap:12px 24px}
+.sl-nav{display:flex;gap:8px}
+.sl-nav[hidden]{display:none}
+.sl-btn{display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;padding:0;border-radius:var(--r);border:1px solid var(--gold-lo);background:transparent;color:var(--gold);cursor:pointer;transition:border-color .2s,color .2s,opacity .2s}
+.sl-btn svg{width:20px;height:20px}
+.sl-btn:hover:not(:disabled){border-color:var(--gold);color:var(--gold)}
+.sl-btn:disabled{opacity:.3;cursor:default}
+.rail{position:relative;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scrollbar-width:none;-ms-overflow-style:none;-webkit-overflow-scrolling:touch;padding:4px 0}
+.rail::-webkit-scrollbar{display:none}
+.rail:focus-visible{outline-offset:2px}
+.rail-track{display:flex;gap:clamp(8px,1vw,12px);margin:0;padding:0;list-style:none}
+.rail-track > li{flex:0 0 calc((100% - 3*clamp(8px,1vw,12px))/4);min-width:0;scroll-snap-align:start}
+.rail-track a:focus-visible{outline-offset:-2px}
+.rail img{-webkit-user-drag:none;user-select:none}
+.rail.drag{scroll-snap-type:none;cursor:grabbing;user-select:none}
+@media (min-width:700px) and (max-width:1023px){ .rail-track > li{flex-basis:calc((100% - 2*clamp(8px,1vw,12px))/3)} }
+@media (max-width:699px){ .rail-track > li{flex-basis:calc((100% - clamp(8px,1vw,12px))/1.3)} }
+
+/* ===== Fondo con vida: manchas de color de marca que se desplazan + grano finísimo ===== */
+body::before,body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none}
+body::before{inset:-15%;background:
+  radial-gradient(42% 38% at 18% 22%,rgba(217,192,135,.10),transparent 70%),
+  radial-gradient(38% 44% at 84% 58%,rgba(217,192,135,.08),transparent 70%),
+  radial-gradient(34% 30% at 46% 96%,rgba(217,192,135,.06),transparent 70%);
+  animation:bgDrift 52s ease-in-out infinite alternate;will-change:transform,opacity}
+body::after{opacity:.05;mix-blend-mode:screen;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 1.4 -.2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E") repeat;background-size:200px 200px}
+@keyframes bgDrift{
+  0%{transform:translate3d(-4%,-3%,0) rotate(0deg) scale(1);opacity:.85}
+  50%{transform:translate3d(3%,2%,0) rotate(6deg) scale(1.08);opacity:1}
+  100%{transform:translate3d(5%,-2%,0) rotate(-4deg) scale(1.14);opacity:.9}
+}
+
+/* ===== Volver arriba: botón flotante ===== */
+.totop{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:48;display:inline-flex;align-items:center;justify-content:center;width:48px;height:48px;padding:0;border:0;border-radius:50%;background:var(--gold);color:#000;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.45);opacity:0;visibility:hidden;transform:translateY(12px);transition:opacity .25s ease,transform .25s ease,visibility 0s linear .25s}
+.totop svg{width:22px;height:22px}
+.totop.show{opacity:1;visibility:visible;transform:none;transition:opacity .25s ease,transform .25s ease,visibility 0s}
+.totop:focus-visible{outline:2px solid var(--gold-hi);outline-offset:3px}
+.drawer.open ~ .totop{visibility:hidden}
+@media (prefers-reduced-motion:reduce){
+  body::before{animation:none}
+  .totop,.totop.show{transform:none}
+}
 </style>
 <script>document.documentElement.className+=" js";</script>
 </head>
@@ -291,7 +357,7 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
     <a class="mark" href="#top" aria-label="Cantina 70, inicio"><img src="img/logo-cantina70.webp" alt="" width="456" height="102" decoding="async"></a>
     <nav class="nav" aria-label="Principal">
       <a class="nl" href="#agenda">Agenda</a>
-      <a class="nl" href="#pasadas">Noches pasadas</a>
+      <a class="nl" href="#eventos-pasados">Eventos pasados</a>
       <a class="nl" href="#fotos">Fotos</a>
       <a class="nl" href="#mesas">Mesas y cumpleaños</a>
       <a class="nl" href="#llegar">Cómo llegar</a>
@@ -304,15 +370,16 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
 </header>
 <nav class="drawer" id="drawer" aria-label="Menú">
   <a href="#agenda">Agenda</a>
-  <a href="#pasadas">Noches pasadas</a>
+  <a href="#eventos-pasados">Eventos pasados</a>
   <a href="#fotos">Así es Cantina 70</a>
   <a href="#mesas">Mesas y cumpleaños</a>
   <a href="#llegar">Cómo llegar</a>
   <a class="btn" href="https://wa.me/573245642946?text=Hola%20Cantina%2070%2C%20quiero%20reservar%20una%20mesa" target="_blank" rel="noopener">Reservar por WhatsApp</a>
 </nav>
 
+<button class="totop" type="button" id="toTop" aria-label="Volver arriba" tabindex="-1" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5M5.5 11.5L12 5l6.5 6.5"/></svg></button>
 <main id="top">
-  <!-- Portada: la próxima noche (IGEvents / FALLBACK_ARRAY). El HTML inicial es Aquelarre para que funcione sin JS. -->
+  <!-- Portada: el próximo evento (IGEvents / FALLBACK_ARRAY). El HTML inicial es Aquelarre para que funcione sin JS. -->
   <section class="hero" aria-labelledby="h1">
     <div class="wrap hero-grid">
       <div class="brand">
@@ -322,7 +389,7 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
       </div>
       <figure class="fly" id="heroFly"><img id="heroImg" src="img/aquelarre.webp" alt="Flyer de Aquelarre, noche de brujas en Cantina 70, 30 y 31 de octubre y 1 de noviembre: brujas alrededor de un caldero" width="831" height="1110" fetchpriority="high"></figure>
       <div class="night" id="heroNight">
-        <p class="lbl" id="heroTag">Próxima noche</p>
+        <p class="lbl" id="heroTag">Próximo evento</p>
         <h2 class="nname" id="heroName">Aquelarre</h2>
         <p class="nsub" id="heroSub">Noche de brujas</p>
         <p class="dates" id="heroDates"><span>Vie <b>30</b> Oct</span><span>Sáb <b>31</b> Oct</span><span>Dom <b>01</b> Nov</span></p>
@@ -346,7 +413,7 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
         <ul class="upc" id="upc"></ul>
       </div>
       <p class="subh rule left rv">Cada semana</p>
-      <ul class="week" id="week" aria-label="Noches de la semana">
+      <ul class="week" id="week" aria-label="Eventos de la semana">
         <li class="day rv" data-day="5">
           <figure class="fly"><img data-fly src="img/viernes-banda-23oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 23 de octubre: calavera dorada con sombrero vaquero" width="831" height="1113" loading="lazy" decoding="async"></figure>
           <div class="day-body">
@@ -382,21 +449,23 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
     </div>
   </section>
 
-  <section class="sec" id="pasadas" aria-labelledby="pasadas-title">
+  <section class="sec" id="eventos-pasados" aria-labelledby="eventos-pasados-title">
     <div class="wrap">
       <div class="head rv">
-        <h2 id="pasadas-title">Noches pasadas</h2>
-        <a class="tlink" href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener">@cantina70.med</a>
+        <h2 id="eventos-pasados-title">Eventos pasados</h2>
+        <div class="sl-end"><a class="tlink" href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener">@cantina70.med</a><div class="sl-nav" aria-label="Controles del carrusel" role="group"><button class="sl-btn" type="button" id="slPrev" aria-controls="archRail" aria-label="Eventos anteriores" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg></button><button class="sl-btn" type="button" id="slNext" aria-controls="archRail" aria-label="Eventos siguientes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></button></div></div>
       </div>
       <!-- Se llena con IGEvents o FALLBACK_ARRAY; data-source indica cuál. El HTML inicial es el respaldo. -->
-      <ul class="grid arch" id="arch" data-source="fallback">
-        <li class="rv"><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Adicta al Dolor, Sáb 17 Oct, en Instagram"><figure class="fly"><img src="img/adicta-al-dolor.webp" alt="Flyer de Adicta al Dolor en Cantina 70, sábado 17 de octubre: corazón dorado atravesado por rosas con espinas" width="831" height="1110" loading="lazy" decoding="async"></figure><p><b>Adicta al Dolor</b>Sáb 17 Oct</p></a></li>
-        <li class="rv"><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Viernes de Banda, Vie 16 Oct, en Instagram"><figure class="fly"><img src="img/viernes-banda-16oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 16 de octubre: querubín dorado con trompeta y sombrero" width="831" height="1110" loading="lazy" decoding="async"></figure><p><b>Viernes de Banda</b>Vie 16 Oct</p></a></li>
-        <li class="rv"><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="El Beneficio de la Duda, Sáb 10 Oct, en Instagram"><figure class="fly"><img src="img/beneficio-duda.webp" alt="Flyer de El Beneficio de la Duda en Cantina 70, sábado 10 de octubre: corazón dorado con cadenas y candado" width="831" height="1113" loading="lazy" decoding="async"></figure><p><b>El Beneficio de la Duda</b>Sáb 10 Oct</p></a></li>
-        <li class="rv"><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Viernes de Banda, Vie 9 Oct, en Instagram"><figure class="fly"><img src="img/viernes-banda-09oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 9 de octubre: mujer con sombrero vaquero brindando" width="828" height="1113" loading="lazy" decoding="async"></figure><p><b>Viernes de Banda</b>Vie 9 Oct</p></a></li>
-        <li class="rv"><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Aguanile, Sáb 3 Oct, en Instagram"><figure class="fly"><img src="img/aguanile.webp" alt="Flyer de Aguanile en Cantina 70, sábado 3 de octubre: máscara dorada con conchas" width="831" height="1110" loading="lazy" decoding="async"></figure><p><b>Aguanile</b>Sáb 3 Oct</p></a></li>
-        <li class="rv"><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Viernes de Banda, Vie 2 Oct, en Instagram"><figure class="fly"><img src="img/viernes-banda-02oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 2 de octubre: calavera de toro dorada con sombrero de charro" width="831" height="1113" loading="lazy" decoding="async"></figure><p><b>Viernes de Banda</b>Vie 2 Oct</p></a></li>
+      <div class="rail" id="archRail" tabindex="0" role="region" aria-roledescription="carrusel" aria-label="Eventos pasados">
+      <ul class="rail-track arch" id="arch" data-source="fallback">
+        <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Adicta al Dolor, Sáb 17 Oct, en Instagram"><figure class="fly"><img src="img/adicta-al-dolor.webp" alt="Flyer de Adicta al Dolor en Cantina 70, sábado 17 de octubre: corazón dorado atravesado por rosas con espinas" width="831" height="1110" loading="lazy" decoding="async"></figure><p><b>Adicta al Dolor</b>Sáb 17 Oct</p></a></li>
+        <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Viernes de Banda, Vie 16 Oct, en Instagram"><figure class="fly"><img src="img/viernes-banda-16oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 16 de octubre: querubín dorado con trompeta y sombrero" width="831" height="1110" loading="lazy" decoding="async"></figure><p><b>Viernes de Banda</b>Vie 16 Oct</p></a></li>
+        <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="El Beneficio de la Duda, Sáb 10 Oct, en Instagram"><figure class="fly"><img src="img/beneficio-duda.webp" alt="Flyer de El Beneficio de la Duda en Cantina 70, sábado 10 de octubre: corazón dorado con cadenas y candado" width="831" height="1113" loading="lazy" decoding="async"></figure><p><b>El Beneficio de la Duda</b>Sáb 10 Oct</p></a></li>
+        <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Viernes de Banda, Vie 9 Oct, en Instagram"><figure class="fly"><img src="img/viernes-banda-09oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 9 de octubre: mujer con sombrero vaquero brindando" width="828" height="1113" loading="lazy" decoding="async"></figure><p><b>Viernes de Banda</b>Vie 9 Oct</p></a></li>
+        <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Aguanile, Sáb 3 Oct, en Instagram"><figure class="fly"><img src="img/aguanile.webp" alt="Flyer de Aguanile en Cantina 70, sábado 3 de octubre: máscara dorada con conchas" width="831" height="1110" loading="lazy" decoding="async"></figure><p><b>Aguanile</b>Sáb 3 Oct</p></a></li>
+        <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener" aria-label="Viernes de Banda, Vie 2 Oct, en Instagram"><figure class="fly"><img src="img/viernes-banda-02oct.webp" alt="Flyer de Viernes de Banda en Cantina 70, 2 de octubre: calavera de toro dorada con sombrero de charro" width="831" height="1113" loading="lazy" decoding="async"></figure><p><b>Viernes de Banda</b>Vie 2 Oct</p></a></li>
       </ul>
+      </div>
     </div>
   </section>
 
@@ -479,15 +548,38 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
   </section>
 </main>
 
-<footer>
-  <div class="wrap foot">
-    <a class="mark" href="#top" aria-label="Cantina 70, volver arriba"><img src="img/logo-cantina70.webp" alt="" width="456" height="102" loading="lazy" decoding="async"></a>
-    <p>Carrera 70 #44B, Laureles–Estadio, Medellín · Jue a dom, 5 p.m.–4 a.m. · WhatsApp +57 324 564 2946</p>
-    <nav aria-label="Pie">
-      <a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener">Instagram</a>
-      <a href="https://wa.me/573245642946" target="_blank" rel="noopener">WhatsApp</a>
-    </nav>
-    <p class="legal">Consumo responsable. Prohibida la venta de alcohol a menores de edad.</p>
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="fgrid">
+      <div class="fcol fbrand">
+        <a class="mark" href="#top" aria-label="Cantina 70, volver arriba"><img src="img/logo-cantina70.webp" alt="" width="456" height="102" loading="lazy" decoding="async"></a>
+        <p class="fl">Banda, popular y despecho en La 70.</p>
+      </div>
+      <div class="fcol">
+        <p class="fh">Visítanos</p>
+        <address><span class="fl">Carrera 70 #44B</span><span class="fl">Laureles, Medellín</span></address>
+        <p class="fl">Jue a dom · <span class="nw">5 p.m. – 4 a.m.</span></p>
+      </div>
+      <div class="fcol">
+        <p class="fh">Contacto</p>
+        <ul>
+          <li><a href="https://wa.me/573245642946" target="_blank" rel="noopener">WhatsApp +57 324 564 2946</a></li>
+          <li><a href="https://www.instagram.com/cantina70.med/" target="_blank" rel="noopener">Instagram @cantina70.med</a></li>
+        </ul>
+      </div>
+      <div class="fcol">
+        <p class="fh">Legal</p>
+        <ul>
+          <li><a href="legal.html#privacidad">Política de privacidad</a></li>
+          <li><a href="legal.html#datos">Tratamiento de datos personales</a></li>
+          <li><a href="legal.html#terminos">Términos y condiciones</a></li>
+          <li><a href="legal.html#cookies">Política de cookies</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="fbar">
+      <p>© <span id="yr">2026</span> Cantina 70. Todos los derechos reservados.</p>
+    </div>
   </div>
 </footer>
 
@@ -524,8 +616,8 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
   function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];}); }
   function safeUrl(u){ return (typeof u === "string" && (/^https:\/\//i.test(u) || /^img\/[\w.-]+$/.test(u))) ? u : null; }
   function absUrl(u){ return /^https:/.test(u) ? u : SITE_URL + u; }
-  function plainTitle(t){ return String(t || "Noche en Cantina 70").split(" · ").join(", "); }
-  function shortTitle(t){ return String(t || "Noche en Cantina 70").split(" · ")[0]; }
+  function plainTitle(t){ return String(t || "Evento en Cantina 70").split(" · ").join(", "); }
+  function shortTitle(t){ return String(t || "Evento en Cantina 70").split(" · ")[0]; }
   function subTitle(t){ var p = String(t || "").split(" · "); return p.length > 1 ? p.slice(1).join(", ") : ""; }
   function cap(s, n){ s = String(s || ""); return s.length > n ? s.slice(0, n).replace(/\s+\S*$/, "") + "…" : s; }
   function waFor(text){ return WA + encodeURIComponent("Hola Cantina 70, quiero reservar para " + text); }
@@ -572,7 +664,7 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
       var place = { "@type":"Place", name:"Cantina 70", address:{ "@type":"PostalAddress", streetAddress:"Carrera 70 #44B", addressLocality:"Medellín", addressRegion:"Antioquia", addressCountry:"CO" } };
       var items = evs.filter(function(ev){ return ev.date && ev._up; }).map(function(ev){
         var start = new Date(ev.date), end = ev.endDate ? new Date(ev.endDate) : new Date(start.getTime() + 11*3600e3);
-        var o = { "@context":"https://schema.org", "@type":"Event", name:String(ev.title||"Noche en Cantina 70"), description:String(ev.caption||"").slice(0,300),
+        var o = { "@context":"https://schema.org", "@type":"Event", name:String(ev.title||"Evento en Cantina 70"), description:String(ev.caption||"").slice(0,300),
           startDate:ev.date, endDate:ev.endDate || end.toISOString(), eventStatus:"https://schema.org/EventScheduled",
           eventAttendanceMode:"https://schema.org/OfflineEventAttendanceMode", location:place,
           organizer:{ "@type":"Organization", name:"Cantina 70", url:SITE_URL } };
@@ -588,7 +680,7 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
     } catch(e){}
   }
 
-  /* ===== Portada: una sola noche, la próxima ===== */
+  /* ===== Portada: un solo evento, el próximo ===== */
   function renderHero(ev, tag){
     var img = safeUrl(ev.image) || "img/viernes-banda-todos.webp", heroImg = $("heroImg");
     if (heroImg.getAttribute("src") !== img) heroImg.src = img;
@@ -646,19 +738,108 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
     return used;
   }
 
-  /* ===== Noches pasadas ===== */
+  /* ===== Eventos pasados (slider con todos los eventos pasados) ===== */
+  /* ===== Slider de eventos pasados: flechas, teclado, arrastre con ratón (swipe nativo en táctil) ===== */
+  var Slider = (function(){
+    var rail = $("archRail"), prev = $("slPrev"), next = $("slNext"), nav = prev && prev.parentNode;
+    if (!rail || !prev || !next) return { reset:function(){}, update:function(){} };
+    var rm = window.matchMedia("(prefers-reduced-motion: reduce)");
+    function items(){ return rail.querySelectorAll(".rail-track > li"); }
+    function step(){
+      var li = items()[0]; if (!li) return rail.clientWidth;
+      var gap = parseFloat(getComputedStyle(li.parentNode).columnGap) || 0;
+      return li.getBoundingClientRect().width + gap;
+    }
+    function maxX(){ return Math.max(0, rail.scrollWidth - rail.clientWidth); }
+    function update(){
+      var x = rail.scrollLeft, m = maxX();
+      prev.disabled = x <= 2;
+      next.disabled = x >= m - 2;
+      if (nav) nav.hidden = m <= 2;
+    }
+    function go(left){ rail.scrollTo({ left:Math.max(0, Math.min(maxX(), left)), behavior: rm.matches ? "auto" : "smooth" }); }
+    function page(dir){
+      var s = step(), gap = parseFloat(getComputedStyle(rail.firstElementChild).columnGap) || 0;
+      var n = Math.max(1, Math.floor((rail.clientWidth + gap + 2) / s));
+      var idx = Math.round(rail.scrollLeft / s) + dir * n;
+      go(idx * s);
+    }
+    prev.addEventListener("click", function(){ page(-1); });
+    next.addEventListener("click", function(){ page(1); });
+    rail.addEventListener("scroll", update, { passive:true });
+    window.addEventListener("resize", update);
+    rail.addEventListener("keydown", function(e){
+      if (e.target !== rail) return;
+      var s = step();
+      if (e.key === "ArrowRight"){ e.preventDefault(); go((Math.round(rail.scrollLeft / s) + 1) * s); }
+      else if (e.key === "ArrowLeft"){ e.preventDefault(); go((Math.round(rail.scrollLeft / s) - 1) * s); }
+      else if (e.key === "Home"){ e.preventDefault(); go(0); }
+      else if (e.key === "End"){ e.preventDefault(); go(maxX()); }
+    });
+    /* Arrastre con ratón: solo tras moverse >6px; el clic posterior al arrastre no abre el enlace */
+    var down = false, dragging = false, sx = 0, sl = 0, pid = null, block = false;
+    rail.addEventListener("pointerdown", function(e){
+      if (e.pointerType !== "mouse" || e.button !== 0) return;
+      down = true; dragging = false; sx = e.clientX; sl = rail.scrollLeft; pid = e.pointerId;
+    });
+    rail.addEventListener("pointermove", function(e){
+      if (!down || e.pointerId !== pid) return;
+      var dx = e.clientX - sx;
+      if (!dragging && Math.abs(dx) > 6){ dragging = true; rail.classList.add("drag"); try { rail.setPointerCapture(pid); } catch(_){} }
+      if (dragging){ e.preventDefault(); rail.scrollLeft = sl - dx; }
+    });
+    function end(e){
+      if (!down || (e && e.pointerId !== pid)) return;
+      down = false;
+      if (!dragging) return;
+      dragging = false; block = true; setTimeout(function(){ block = false; }, 0);
+      try { rail.releasePointerCapture(pid); } catch(_){}
+      var x = rail.scrollLeft, s = step();
+      rail.classList.remove("drag");
+      rail.scrollLeft = x;
+      go(Math.round(x / s) * s);
+    }
+    rail.addEventListener("pointerup", end);
+    rail.addEventListener("pointercancel", end);
+    rail.addEventListener("lostpointercapture", end);
+    rail.addEventListener("click", function(e){ if (block){ e.preventDefault(); e.stopPropagation(); block = false; } }, true);
+    rail.addEventListener("dragstart", function(e){ e.preventDefault(); });
+    function reset(){ rail.scrollLeft = 0; update(); }
+    update();
+    return { reset:reset, update:update };
+  })();
+
+  /* ===== Volver arriba (botón flotante) ===== */
+  (function(){
+    var b = $("toTop"); if (!b) return;
+    var rm = window.matchMedia("(prefers-reduced-motion: reduce)"), on = null;
+    function chk(){
+      var s = window.scrollY > 600;
+      if (s === on) return; on = s;
+      b.classList.toggle("show", s);
+      b.setAttribute("aria-hidden", s ? "false" : "true");
+      b.tabIndex = s ? 0 : -1;
+    }
+    window.addEventListener("scroll", chk, { passive:true }); chk();
+    b.addEventListener("click", function(){
+      window.scrollTo({ top:0, behavior: rm.matches ? "auto" : "smooth" });
+      var t = document.querySelector(".top a"); if (t) t.focus({ preventScroll:true });
+    });
+  })();
+  window.__slUpd = Slider.update;
+
   function renderArchive(past, used, meta){
     var arch = $("arch");
-    var list = past.filter(function(ev){ return !used[ev.id || ev.image] && safeUrl(ev.image); }).slice(0, 9);
-    if (list.length < 3) list = past.filter(function(ev){ return safeUrl(ev.image); }).slice(0, 6);
-    if (list.length > 3) list = list.slice(0, list.length - list.length % 3 || list.length);
+    var list = past.filter(function(ev){ return !used[ev.id || ev.image] && safeUrl(ev.image); });
+    if (list.length < 3) list = past.filter(function(ev){ return safeUrl(ev.image); });
     arch.innerHTML = list.map(function(ev){
       var link = safeUrl(ev.permalink) || IG, title = shortTitle(ev.title);
-      return '<li class="rv in"><a href="' + esc(link) + '" target="_blank" rel="noopener" aria-label="' + esc(title + ", " + label(ev)) + ', en Instagram">' +
-        '<figure class="fly"><img src="' + esc(safeUrl(ev.image)) + '" alt="' + esc(ev.alt || ("Flyer de " + plainTitle(ev.title) + " en Cantina 70")) + '" width="831" height="1110" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="this.closest(\'li\').remove()"></figure>' +
+      return '<li><a href="' + esc(link) + '" target="_blank" rel="noopener" aria-label="' + esc(title + ", " + label(ev)) + ', en Instagram">' +
+        '<figure class="fly"><img src="' + esc(safeUrl(ev.image)) + '" alt="' + esc(ev.alt || ("Flyer de " + plainTitle(ev.title) + " en Cantina 70")) + '" width="831" height="1110" loading="lazy" decoding="async" referrerpolicy="no-referrer" onerror="var l=this.closest(\'li\');l&&l.remove();window.__slUpd&&window.__slUpd()"></figure>' +
         '<p><b>' + esc(title) + '</b>' + esc(label(ev)) + '</p></a></li>';
     }).join("");
-    $("pasadas").hidden = !list.length;
+    $("eventos-pasados").hidden = !list.length;
+    Slider.reset();
     arch.setAttribute("data-source", meta.source === "instagram" ? "instagram" : "fallback");
     if (meta.updated) arch.setAttribute("data-updated", meta.updated);
   }
@@ -671,7 +852,7 @@ footer{border-top:1px solid var(--gold-lo);padding:48px 0 calc(40px + env(safe-a
     var upc = evs.filter(function(e){ return e._up; }).sort(function(a,b){ return (Date.parse(a.date)||0) - (Date.parse(b.date)||0); });
     var past = evs.filter(function(e){ return !e._up; }).sort(function(a,b){ return (Date.parse(b.date)||0) - (Date.parse(a.date)||0); });
     try {
-      if (upc.length) renderHero(upc[0], "Próxima noche");
+      if (upc.length) renderHero(upc[0], "Próximo evento");
       else {
         var f = nextOf(5);
         renderHero(Object.assign({}, STANDING, { _night:f }), "Este viernes");
